@@ -1,0 +1,59 @@
+#include <stm32f0xx.h>
+
+void init(void);
+void loop(void);
+
+//set and reset bit for volatile uint32_t
+void setBitV(volatile uint32_t* bit, uint32_t value);
+void resetBitV(volatile uint32_t* bit, uint32_t value);
+void wait(void);
+
+void setBitV(volatile uint32_t* bit, uint32_t value)
+{
+	*bit |= value;
+}
+void resetBitV(volatile uint32_t* bit, uint32_t value)
+{
+	*bit &= ~value;
+}
+
+void init(void)
+{
+	RCC->AHBENR |= RCC_AHBENR_GPIOCEN;//enable register(?)
+	//PC6 - LED
+	GPIOC->MODER |= GPIO_MODER_MODER6_0 | GPIO_MODER_MODER7_0 | GPIO_MODER_MODER8_0 | GPIO_MODER_MODER9_0;//enable ports
+	
+	//GPIOC->ODR |= GPIO_ODR_6;//set bit
+	//GPIOC->ODR &= ~GPIO_ODR_6; //reset bit
+}
+void wait(void)
+{
+	for (int i=0; i<500000; i++){}
+}
+void loop()
+{
+	setBitV(&GPIOC->ODR, GPIO_ODR_6);//up
+	wait();
+	resetBitV(&GPIOC->ODR, GPIO_ODR_6);
+
+	setBitV(&GPIOC->ODR, GPIO_ODR_8);//left
+	wait();
+	resetBitV(&GPIOC->ODR, GPIO_ODR_8);
+	
+	setBitV(&GPIOC->ODR, GPIO_ODR_7);//down
+	wait();
+	resetBitV(&GPIOC->ODR, GPIO_ODR_7);
+
+	setBitV(&GPIOC->ODR, GPIO_ODR_9);//right
+	wait();
+	resetBitV(&GPIOC->ODR, GPIO_ODR_9);
+}	
+
+int main(void)
+{
+	init();
+	while(1)
+	{
+		loop();
+	}
+}

@@ -12,4 +12,4 @@
   E:\programms\controllers\keil5\ARM\ARMCLANG\Bin\..\include\stdlib.h \
   buttons.h \
   E:\programms\controllers\keil5\ARM\ARMCLANG\Bin\..\include\stdbool.h \
-  renderAPI.h
+  renderAPI.h adcRead.h

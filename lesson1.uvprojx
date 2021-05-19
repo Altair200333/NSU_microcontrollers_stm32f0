@@ -398,6 +398,11 @@
               <FileType>5</FileType>
               <FilePath>.\renderAPI.h</FilePath>
             </File>
+            <File>
+              <FileName>adcRead.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\adcRead.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

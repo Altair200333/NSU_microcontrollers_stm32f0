@@ -3,6 +3,7 @@
 
 #include "buttons.h"
 #include "renderAPI.h"
+#include "adcRead.h"
 
 typedef struct 
 {
@@ -23,7 +24,8 @@ void traffic(void);
 void SysTick_Init(void);
 void SysTick_Wait(uint32_t);
 void renderLoop(void);
-
+void DMA1_Channel1_IRQHandler(void);
+	
 #define LED GPIOC->ODR
 #define F_CPU 		72000000UL	
 #define Rled GPIO_ODR_6
@@ -50,6 +52,8 @@ void SysTick_Handler (void)
 }
 static int ypos = 0;
 static int xpos = 0;
+static volatile bool use_dma = true;
+
 void SPI2_IRQHandler(void)
 {
 	setBitV(&LED, Rled);
@@ -58,6 +62,17 @@ void SPI2_IRQHandler(void)
 	renderInt();
 	resetBitV(&LED, Rled);
 }
+
+void  DMA1_Channel1_IRQHandler(void)
+{    
+	//setBitV(&LED, Rled);
+	//DMA ADC1	
+	if (DMA1->ISR & DMA_ISR_TCIF1) {    //   Channel 1 Transfer Complete flag
+		dma.DMA_full=true;
+		DMA1->IFCR |= DMA_IFCR_CTCIF1;
+	}
+}
+
 void wait(uint32_t delay)
 {
 	uint32_t delaystamp = timestamp + delay;
@@ -102,11 +117,44 @@ void init(void)
 	
 	resetBtns();
 	initSPI();
+	initADC();
+	
+	if(use_dma)
+		initDMA(&dma);
 }
 
 bool buttonDown()
 {
 	return GPIOA->IDR & GPIO_IDR_0;
+}
+static volatile uint16_t levels[8];
+
+void drawOSC(uint16_t value)
+{
+	uint16_t osc = (value+1)/1024.0f*7;
+	for(int i=1;i<8;++i)
+	{
+		levels[i-1] = levels[i];
+	}
+	levels[7] = osc;
+	for(int i=0;i<8;++i)
+	{
+		drawSpiPos(i, levels[i]%8);
+	}
+}
+void DMAEveryTick(DMA* dma)
+{
+	uint16_t result = 0;
+	if (dma->DMA_full) 
+	{
+		for(int i=0;i<16;++i)
+		{
+			result += dma->ADC_array[i];
+		}
+		result = result/16;
+		dma->DMA_full = false;
+		drawOSC(result);
+	}
 }
 static int clamp(int val, int min,int max)
 {
@@ -169,14 +217,12 @@ void loop(Context* context)
 	for(int i =-1;i<=1;++i)
 		if(ypos+i>=0 && ypos+i<8)
 			drawSpiPos(xpos, ypos+i);
-	
-	//for(int i=0; i<8; i++)
-	//{
-	//	renderBegin();
-	//	drawRow(i, &renderBuffer);
-	//	while(renderBusy()){}	
-	//	renderFlush();
-	//}
+	if(!use_dma)
+		drawOSC(blockingRead());
+	else
+	{
+		DMAEveryTick(&dma);
+	}
 	clientFlush();
 	clearImage();
 	wait(40);

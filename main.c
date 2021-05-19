@@ -1,4 +1,5 @@
 #include <stm32f0xx.h>
+#include <system_stm32f0xx.h>
 #include <stdlib.h>
 
 #include "buttons.h"
@@ -67,7 +68,7 @@ void  DMA1_Channel1_IRQHandler(void)
 {    
 	//setBitV(&LED, Rled);
 	//DMA ADC1	
-	if (DMA1->ISR & DMA_ISR_TCIF1) {    //   Channel 1 Transfer Complete flag
+	if (DMA1->ISR & DMA_ISR_TCIF1) { 
 		dma.DMA_full=true;
 		DMA1->IFCR |= DMA_IFCR_CTCIF1;
 	}
@@ -178,6 +179,7 @@ void loop(Context* context)
 		states[0] = true;
 	}
 	
+	
 	for (int i = 0; i < 4; ++i)
 	{
 		if(keyStates[i].state)
@@ -225,12 +227,11 @@ void loop(Context* context)
 	}
 	clientFlush();
 	clearImage();
-	wait(40);
+	wait(60);
 }	
 
 int main(void)
 {
-	
 	Context* context = (Context*)malloc(sizeof(Context));
 	context->counter = 0;
 	

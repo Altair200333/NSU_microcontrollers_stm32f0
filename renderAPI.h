@@ -5,7 +5,7 @@
 
 typedef struct 
 {
-	short rows[64];
+	int rows[8];
 } GLRenderBuffer;
 
 static volatile GLRenderBuffer renderBuffer;
@@ -56,20 +56,23 @@ static void initSPI()
 void drawRow(int row, volatile GLRenderBuffer* renderBuffer)
 {
 	int result = 0;
-	//sresult |= (0x1U << row) << 8 | (0x1U << 0);
-	//sresult |= (0x1U << row) << 8 | (0x1U << 1);
 
-	for(int i=0;i<8; i++)
-	{
-		result |= renderBuffer->rows[row*8 + i]*((0x1U << row) << 8 | (0x1U << i));
-	}
+	if(row>=8)
+		row = 7;
+	if(row<0)
+		row = 0;
+	result |= renderBuffer->rows[row];
+	
 	SPI2->DR |= result;
 }
 
 static void drawSpiPos(int x, int y)
 {
-	renderBuffer.rows[y*8 + x] = 1;
-	//renderBuffer |= (0x1U << y) << 8 | (0x1U << x);
+	if(y>=8)
+		y = 7;
+	if(y<0)
+		y = 0;
+	renderBuffer.rows[y] |= (0x1U << y) << 8 | (0x1U << x);
 }
 bool renderBusy()
 {
@@ -85,7 +88,7 @@ void renderFlush()
 }
 static void clearImage()
 {
-	for(int i=0; i<64; ++i)
+	for(int i=0; i<8; ++i)
 	{
 		renderBuffer.rows[i] = 0;
 	}

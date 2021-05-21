@@ -4,7 +4,7 @@
 
 #include "buttons.h"
 #include "renderAPI.h"
-#include "adcRead.h"
+#include "pingPong.h"
 
 typedef struct 
 {
@@ -64,16 +64,6 @@ void SPI2_IRQHandler(void)
 	resetBitV(&LED, Rled);
 }
 
-void  DMA1_Channel1_IRQHandler(void)
-{    
-	//setBitV(&LED, Rled);
-	//DMA ADC1	
-	if (DMA1->ISR & DMA_ISR_TCIF1) { 
-		dma.DMA_full=true;
-		DMA1->IFCR |= DMA_IFCR_CTCIF1;
-	}
-}
-
 void wait(uint32_t delay)
 {
 	uint32_t delaystamp = timestamp + delay;
@@ -118,10 +108,7 @@ void init(void)
 	
 	resetBtns();
 	initSPI();
-	initADC();
-	
-	if(use_dma)
-		initDMA(&dma);
+	initPong();
 }
 
 bool buttonDown()
@@ -130,33 +117,6 @@ bool buttonDown()
 }
 static volatile uint16_t levels[8];
 
-void drawOSC(uint16_t value)
-{
-	uint16_t osc = (value+1)/1024.0f*7;
-	for(int i=1;i<8;++i)
-	{
-		levels[i-1] = levels[i];
-	}
-	levels[7] = osc;
-	for(int i=0;i<8;++i)
-	{
-		drawSpiPos(i, levels[i]%8);
-	}
-}
-void DMAEveryTick(DMA* dma)
-{
-	uint16_t result = 0;
-	if (dma->DMA_full) 
-	{
-		for(int i=0;i<16;++i)
-		{
-			result += dma->ADC_array[i];
-		}
-		result = result/16;
-		dma->DMA_full = false;
-		drawOSC(result);
-	}
-}
 static int clamp(int val, int min,int max)
 {
 	if(val>max)
@@ -165,7 +125,6 @@ static int clamp(int val, int min,int max)
 		return min;
 	return val;
 }
-static volatile bool states[4] = {false,false,false,false};
 
 #define CHECK_BIT(var,pos) ((var) & (1<<(pos)))
 
@@ -176,7 +135,7 @@ void loop(Context* context)
 
 	if(buttonDown())
 	{
-		states[0] = true;
+		//states[0] = true;
 	}
 	
 	
@@ -184,7 +143,6 @@ void loop(Context* context)
 	{
 		if(keyStates[i].state)
 		{
-			states[i] = !states[i];
 			//keyStates[i].clicked = false;
 			
 			if(i==2)
@@ -199,19 +157,9 @@ void loop(Context* context)
 			
 			xpos = clamp(xpos, 0, 7);
 			ypos = clamp(ypos, 0, 7);
-
 		}
-		
 	}
-	for (int i = 0; i < 4; ++i)
-	{
-		//if(states[i])
-		//	setBitV(&LED, leds[i]);
-		//else
-		//	resetBitV(&LED, leds[i]);
-	}
-	
-	
+
 	for(int i =-1;i<=1;++i)
 		if(xpos+i>=0 && xpos+i<8)
 			drawSpiPos(xpos+i, ypos);
@@ -219,15 +167,12 @@ void loop(Context* context)
 	for(int i =-1;i<=1;++i)
 		if(ypos+i>=0 && ypos+i<8)
 			drawSpiPos(xpos, ypos+i);
-	if(!use_dma)
-		drawOSC(blockingRead());
-	else
-	{
-		DMAEveryTick(&dma);
-	}
+	
+	onUpdatePong(timestamp);
+		
 	clientFlush();
 	clearImage();
-	wait(60);
+	wait(40);
 }	
 
 int main(void)

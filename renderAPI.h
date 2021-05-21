@@ -2,6 +2,12 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <stm32f0xx.h>
+#include "renderAPI.h"
+
+#define Key_Up 2
+#define Key_Down 3
+#define Key_Right 1
+#define Key_Left 0
 
 typedef struct 
 {
@@ -57,10 +63,6 @@ void drawRow(int row, volatile GLRenderBuffer* renderBuffer)
 {
 	int result = 0;
 
-	if(row>=8)
-		row = 7;
-	if(row<0)
-		row = 0;
 	result |= renderBuffer->rows[row];
 	
 	SPI2->DR |= result;
@@ -68,10 +70,9 @@ void drawRow(int row, volatile GLRenderBuffer* renderBuffer)
 
 static void drawSpiPos(int x, int y)
 {
-	if(y>=8)
-		y = 7;
-	if(y<0)
-		y = 0;
+	if(y>=8 || y<0)
+		return;
+		
 	renderBuffer.rows[y] |= (0x1U << y) << 8 | (0x1U << x);
 }
 bool renderBusy()

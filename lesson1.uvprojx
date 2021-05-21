@@ -403,6 +403,11 @@
               <FileType>5</FileType>
               <FilePath>.\adcRead.h</FilePath>
             </File>
+            <File>
+              <FileName>pingPong.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\pingPong.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

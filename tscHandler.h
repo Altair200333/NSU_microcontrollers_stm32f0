@@ -23,15 +23,15 @@ void TSC_IRQHandler(void)
 //alt.func. number ^;pin.^;   ^ - always the same
 void touch_init(void) 
 {
-	
+	//PA7  PA6
 	RCC->AHBENR |= RCC_AHBENR_GPIOAEN | RCC_AHBENR_GPIOBEN | RCC_AHBENR_GPIOCEN;
 	
-	GPIOA->MODER |= (0x2 << (2*2)) + (0x2 << (2*3)); //enable AF for PA1 and PA2
+	GPIOA->MODER |= (0x2 << (2*6)) + (0x2 << (2*7)); //enable AF for PA6 and PA7
 	
 	
-	GPIOA->AFR[0] |= (0x3 << (4*2)) + (0x3 << (4*3)); //enable AF3 for PA2 and PA3
+	GPIOA->AFR[0] |= (0x3 << (4*6)) + (0x3 << (4*7)); //enable AF3 for PA7 and PA7
 	GPIOA->OTYPER |= (1<<3);
-		
+
 	RCC->AHBENR |= RCC_AHBENR_TSEN;
 	
 	TSC->IOSCR |= TSC_IOSCR_G2_IO4; //enable G1_IO4 as sampling capacitor
@@ -39,7 +39,7 @@ void touch_init(void)
 	
 	TSC->IOGCSR |= TSC_IOGCSR_G2E; //enable G1 analog group
 	
-	TSC->IOHCR &= (uint32_t)(~(TSC_IOHCR_G2_IO4 | TSC_IOHCR_G2_IO3)); //disable hysteresis on PA1 and PA2 
+	TSC->IOHCR &= (uint32_t)(~(TSC_IOHCR_G2_IO4 | TSC_IOHCR_G2_IO3)); //disable hysteresis on PA6 and PA7
 		
 	TSC->IER |= TSC_IER_EOAIE; //enable end of acquisition interrupt
 	NVIC_EnableIRQ(TSC_IRQn);

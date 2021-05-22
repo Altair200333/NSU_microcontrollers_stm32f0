@@ -6,6 +6,7 @@
 #include "renderAPI.h"
 #include "pingPong.h"
 #include "tscHandler.h"
+#include "leds.h"
 
 typedef struct 
 {
@@ -28,21 +29,7 @@ void SysTick_Wait(uint32_t);
 void renderLoop(void);
 void DMA1_Channel1_IRQHandler(void);
 	
-#define LED GPIOC->ODR
 #define F_CPU 		72000000UL	
-#define Rled GPIO_ODR_6
-#define Oled GPIO_ODR_8
-#define Bled GPIO_ODR_7
-#define Gled GPIO_ODR_9
-
-void setBitV(volatile uint32_t* bit, uint32_t value)
-{
-	*bit |= value;
-}
-void resetBitV(volatile uint32_t* bit, uint32_t value)
-{
-	*bit &= ~value;
-}
 
 static volatile uint32_t timestamp = 0;
   
@@ -57,9 +44,7 @@ static int xpos = 0;
 static volatile bool use_dma = true;
 
 void SPI2_IRQHandler(void)
-{
-	setBitV(&LED, Rled);
-	
+{	
 	volatile uint16_t data = SPI2->DR;
 	renderInt();
 	resetBitV(&LED, Rled);
@@ -133,42 +118,10 @@ static int clamp(int val, int min,int max)
 
 void loop(Context* context)
 {
-	uint32_t leds[4] = {Rled, Bled, Gled, Oled};
-
 	if(buttonDown())
 	{
 		//states[0] = true;
 	}
-	
-	
-	for (int i = 0; i < 4; ++i)
-	{
-		if(keyStates[i].state)
-		{
-			//keyStates[i].clicked = false;
-			
-			if(i==2)
-				ypos++;
-			if(i==3)
-				ypos--;
-			
-			if(i==1)
-				xpos++;
-			if(i==0)
-				xpos--;
-			
-			xpos = clamp(xpos, 0, 7);
-			ypos = clamp(ypos, 0, 7);
-		}
-	}
-
-	//for(int i =-1;i<=1;++i)
-	//	if(xpos+i>=0 && xpos+i<8)
-	//		drawSpiPos(xpos+i, ypos);
-	//
-	//for(int i =-1;i<=1;++i)
-	//	if(ypos+i>=0 && ypos+i<8)
-	//		drawSpiPos(xpos, ypos+i);
 	
 	//onUpdatePong(timestamp);
 

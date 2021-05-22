@@ -3,14 +3,17 @@
 #include "renderAPI.h"
 #include <math.h>
 //idle value = 145(5-7)
+//min  value = 1455
 static volatile uint32_t rawValue = 0;
+int group = 1;
+
 void TSC_IRQHandler(void)
 {
 	if ((TSC->ISR & TSC_ISR_EOAF) == TSC_ISR_EOAF)
 	{	
 		TSC->ICR = TSC_ICR_EOAIC; /* Clear flag */
 		
-	  uint32_t AcquisitionValue = TSC->IOGXCR[1]; /* Get G2 counter value */
+	  uint32_t AcquisitionValue = TSC->IOGXCR[group]; /* Get G2 counter value */
 		rawValue = AcquisitionValue;
 		int n = AcquisitionValue;
 		int i = 0;
@@ -25,21 +28,25 @@ void TSC_IRQHandler(void)
 		TSC->CR |= TSC_CR_START;
 	}
 }
-void lateTSCinit()
-{
-	TSC->IER |= TSC_IER_EOAIE; //enable end of acquisition interrupt
-	
-	NVIC_EnableIRQ(TSC_IRQn);//bind interruput
-	
-	TSC->CR |= TSC_CR_PGPSC_2 | TSC_CR_PGPSC_0 | TSC_CR_CTPH_0 | TSC_CR_CTPL_0 | TSC_CR_MCV_2 | TSC_CR_MCV_1 | TSC_CR_TSCE;//TSC_CR_PGPSC_2 | TSC_CR_PGPSC_0 | TSC_CR_CTPH_0 | TSC_CR_CTPL_0 | TSC_CR_MCV_2 | TSC_CR_MCV_1 | TSC_CR_TSCE;//pure magic lol
-	TSC->CR |= TSC_CR_START;//(0x01 + 0x00C0 + 0x02); //enable TSC and start acquisition
-}
 
-void initPins(int pin1, int pin2)
+void initPins(int pin1, int pin2, char letter)
 {
 	uint32_t gio1 = 0, gio1_h = 0;
 	uint32_t gio2 = 0, gio2_h = 0;
-	
+	uint32_t group_analog = 0;
+	{
+		if(letter == 'a' || letter == 'A')
+		{
+			if(pin1>=0 && pin1<=3)
+			{
+				gio1 = 0x1UL << pin1;
+			}
+			if(pin1>=0 && pin1<=3)
+			{
+				gio1 = 0x1UL << pin1;
+			}
+		}
+	}
 	GPIOA->MODER |= (0x2 << (2*pin1 - (pin1>=8?8:0))) + (0x2 << (2*pin2 - (pin2>=8?8:0))); //enable AF for pin1 and pin2
 	
 	GPIOA->AFR[pin1>=8?1:0] |= (0x3 << (4*pin1 - (pin1>=8?8:0))) + (0x3 << (4*pin2 - (pin2>=8?8:0))); //enable AF3 for PA7 and PA7
@@ -50,9 +57,20 @@ void initPins(int pin1, int pin2)
 	TSC->IOSCR |= gio1; //enable G1_IO4 as sampling capacitor
 	TSC->IOCCR |= gio2; //enable G1_IO3 as channel
 	
-	TSC->IOGCSR |= TSC_IOGCSR_G2E; //enable G2 analog group
+	TSC->IOGCSR |= group_analog; //enable G2 analog group
 	
 	TSC->IOHCR &= (uint32_t)(~(TSC_IOHCR_G2_IO4 | TSC_IOHCR_G2_IO3)); //disable hysteresis on PA6 and PA7
+}
+void lateTSCinit()
+{
+	TSC->IER |= TSC_IER_EOAIE; //enable end of acquisition interrupt
+	
+	NVIC_EnableIRQ(TSC_IRQn);//bind interruput
+	
+	TSC->CR |= TSC_CR_PGPSC_2 | TSC_CR_PGPSC_0 | TSC_CR_CTPH_0 | TSC_CR_CTPL_0 | TSC_CR_MCV_2 | TSC_CR_MCV_1 | TSC_CR_TSCE;//TSC_CR_PGPSC_2 | TSC_CR_PGPSC_0 | TSC_CR_CTPH_0 | TSC_CR_CTPL_0 | TSC_CR_MCV_2 | TSC_CR_MCV_1 | TSC_CR_TSCE;//pure magic lol
+	TSC->CR |= TSC_CR_START;//(0x01 + 0x00C0 + 0x02); //enable TSC and start acquisition
+	//TSC->CR |= TSC_CR_AM;
+
 }
 //GPIOA->AFR[0] |= 3 << (0) * 4;
 //alt.func. number ^;pin.^;   ^ - always the same
@@ -75,8 +93,6 @@ void touch_init(void)
 	TSC->IOGCSR |= TSC_IOGCSR_G2E; //enable G2 analog group
 	
 	TSC->IOHCR &= (uint32_t)(~(TSC_IOHCR_G2_IO4 | TSC_IOHCR_G2_IO3)); //disable hysteresis on PA6 and PA7
-		
-	
 	
 	lateTSCinit();
 }

@@ -70,7 +70,7 @@ void drawRow(int row, volatile GLRenderBuffer* renderBuffer)
 
 static void drawSpiPos(int x, int y)
 {
-	if(y>=8 || y<0)
+	if(y>=8 || y<0 || x<0 || x>=8)
 		return;
 		
 	renderBuffer.rows[y] |= (0x1U << y) << 8 | (0x1U << x);

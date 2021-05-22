@@ -14,4 +14,5 @@
   buttons.h \
   E:\programms\controllers\keil5\ARM\ARMCLANG\Bin\..\include\stdbool.h \
   renderAPI.h pingPong.h \
-  E:\programms\controllers\keil5\ARM\ARMCLANG\Bin\..\include\math.h
+  E:\programms\controllers\keil5\ARM\ARMCLANG\Bin\..\include\math.h \
+  tscHandler.h

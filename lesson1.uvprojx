@@ -408,6 +408,11 @@
               <FileType>5</FileType>
               <FilePath>.\pingPong.h</FilePath>
             </File>
+            <File>
+              <FileName>tscHandler.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\tscHandler.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

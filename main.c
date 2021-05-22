@@ -5,6 +5,7 @@
 #include "buttons.h"
 #include "renderAPI.h"
 #include "pingPong.h"
+#include "tscHandler.h"
 
 typedef struct 
 {
@@ -109,6 +110,7 @@ void init(void)
 	resetBtns();
 	initSPI();
 	initPong();
+	touch_init();
 }
 
 bool buttonDown()
@@ -160,16 +162,16 @@ void loop(Context* context)
 		}
 	}
 
-	for(int i =-1;i<=1;++i)
-		if(xpos+i>=0 && xpos+i<8)
-			drawSpiPos(xpos+i, ypos);
+	//for(int i =-1;i<=1;++i)
+	//	if(xpos+i>=0 && xpos+i<8)
+	//		drawSpiPos(xpos+i, ypos);
+	//
+	//for(int i =-1;i<=1;++i)
+	//	if(ypos+i>=0 && ypos+i<8)
+	//		drawSpiPos(xpos, ypos+i);
 	
-	for(int i =-1;i<=1;++i)
-		if(ypos+i>=0 && ypos+i<8)
-			drawSpiPos(xpos, ypos+i);
-	
-	onUpdatePong(timestamp);
-		
+	//onUpdatePong(timestamp);
+	 
 	clientFlush();
 	clearImage();
 	wait(40);

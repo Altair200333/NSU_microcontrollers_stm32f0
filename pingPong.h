@@ -60,9 +60,20 @@ void updateBall()
 	ball.y += ball.yVelocity;
 	
 	if(ball.x>7 || ball.x<0)
-		ball.xVelocity *= -1.0f;
+	{
+			ball.xVelocity *= -1.0f;
+			//ball.x = 3;
+			//ball.y = 3;
+	}
 	if(ball.y>7 || ball.y<0)
 		ball.yVelocity *= -1.0f;
+	
+	if ((ball.x<1 && ball.y<platformLeft.y+platformLeft.width && ball.y>platformLeft.y-platformLeft.width) ||
+			(ball.x>6 && ball.y<platformRight.y+platformRight.width && ball.y>platformRight.y-platformRight.width))
+	{
+		//ball.yVelocity *= -1.0f;
+	}
+	
 }
 
 void onUpdatePong(volatile uint32_t timestamp)
@@ -78,6 +89,16 @@ void onUpdatePong(volatile uint32_t timestamp)
 	{
 		controlled->y -= 1;
 	}
+	
+	if(keyStates[Key_Right].state && platformRight.y+platformRight.width+1<8)
+	{
+		platformRight.y += 1;
+	}
+	if(keyStates[Key_Left].state && platformRight.y-platformRight.width-1>=0)
+	{
+		platformRight.y -= 1;
+	}
+	
 	drawSpiPos((int)round(ball.x), (int)round(ball.y));
 	
 	updateBall();

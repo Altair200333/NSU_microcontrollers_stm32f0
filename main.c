@@ -171,7 +171,7 @@ void loop(Context* context)
 	//		drawSpiPos(xpos, ypos+i);
 	
 	//onUpdatePong(timestamp);
-	 
+
 	clientFlush();
 	clearImage();
 	wait(40);

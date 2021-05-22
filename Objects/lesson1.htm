@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Objects\lesson1.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Objects\lesson1.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6150002: Last Updated: Sun May 23 04:28:17 2021
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6150002: Last Updated: Sun May 23 05:57:23 2021
 <BR><P>
 <H3>Maximum Stack Usage =         96 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -352,30 +352,22 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[34]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[4f]"></a>__aeabi_uidiv</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, aeabi_sdiv.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[54]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;init
-<LI><a href="#[4e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SystemCoreClockUpdate
+<P><STRONG><a name="[52]"></a>__aeabi_uidiv</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, aeabi_sdiv.o(.text))
+<BR><BR>[Called By]<UL><LI><a href="#[55]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;init
+<LI><a href="#[51]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SystemCoreClockUpdate
 </UL>
 
 <P><STRONG><a name="[87]"></a>__aeabi_uidivmod</STRONG> (Thumb, 20 bytes, Stack size 0 bytes, aeabi_sdiv.o(.text), UNUSED)
 
-<P><STRONG><a name="[52]"></a>__aeabi_idiv</STRONG> (Thumb, 0 bytes, Stack size 8 bytes, aeabi_sdiv.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = __aeabi_idiv
-</UL>
-<BR>[Called By]<UL><LI><a href="#[e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TSC_IRQHandler
-</UL>
+<P><STRONG><a name="[88]"></a>__aeabi_idiv</STRONG> (Thumb, 0 bytes, Stack size 8 bytes, aeabi_sdiv.o(.text), UNUSED)
 
-<P><STRONG><a name="[50]"></a>__aeabi_idivmod</STRONG> (Thumb, 338 bytes, Stack size 8 bytes, aeabi_sdiv.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = __aeabi_idivmod
-</UL>
-<BR>[Called By]<UL><LI><a href="#[e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TSC_IRQHandler
-</UL>
+<P><STRONG><a name="[89]"></a>__aeabi_idivmod</STRONG> (Thumb, 338 bytes, Stack size 8 bytes, aeabi_sdiv.o(.text), UNUSED)
 
-<P><STRONG><a name="[88]"></a>__use_two_region_memory</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, heapauxi.o(.text), UNUSED)
+<P><STRONG><a name="[8a]"></a>__use_two_region_memory</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, heapauxi.o(.text), UNUSED)
 
-<P><STRONG><a name="[89]"></a>__rt_heap_escrow</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, heapauxi.o(.text), UNUSED)
+<P><STRONG><a name="[8b]"></a>__rt_heap_escrow</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, heapauxi.o(.text), UNUSED)
 
-<P><STRONG><a name="[8a]"></a>__rt_heap_expand</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, heapauxi.o(.text), UNUSED)
+<P><STRONG><a name="[8c]"></a>__rt_heap_expand</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, heapauxi.o(.text), UNUSED)
 
 <P><STRONG><a name="[3b]"></a>__rt_heap_descriptor</STRONG> (Thumb, 8 bytes, Stack size 0 bytes, rt_heap_descriptor_intlibspace.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[41]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;free
@@ -383,13 +375,13 @@ Global Symbols
 <LI><a href="#[3a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;malloc
 </UL>
 
-<P><STRONG><a name="[8b]"></a>__use_no_heap</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, hguard.o(.text), UNUSED)
+<P><STRONG><a name="[8d]"></a>__use_no_heap</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, hguard.o(.text), UNUSED)
 
-<P><STRONG><a name="[8c]"></a>__heap$guard</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, hguard.o(.text), UNUSED)
+<P><STRONG><a name="[8e]"></a>__heap$guard</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, hguard.o(.text), UNUSED)
 
-<P><STRONG><a name="[8d]"></a>_terminate_user_alloc</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, init_alloc.o(.text), UNUSED)
+<P><STRONG><a name="[8f]"></a>_terminate_user_alloc</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, init_alloc.o(.text), UNUSED)
 
-<P><STRONG><a name="[8e]"></a>_init_user_alloc</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, init_alloc.o(.text), UNUSED)
+<P><STRONG><a name="[90]"></a>_init_user_alloc</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, init_alloc.o(.text), UNUSED)
 
 <P><STRONG><a name="[3c]"></a>__Heap_Full</STRONG> (Thumb, 32 bytes, Stack size 16 bytes, init_alloc.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = __Heap_Full &rArr; __Heap_ProvideMemory &rArr; free
@@ -418,7 +410,7 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[2e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_init_alloc
 </UL>
 
-<P><STRONG><a name="[8f]"></a>__Heap_DescSize</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, h1_init.o(.text), UNUSED)
+<P><STRONG><a name="[91]"></a>__Heap_DescSize</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, h1_init.o(.text), UNUSED)
 
 <P><STRONG><a name="[41]"></a>free</STRONG> (Thumb, 76 bytes, Stack size 16 bytes, h1_free.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = free
@@ -428,13 +420,13 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[3d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__Heap_ProvideMemory
 </UL>
 
-<P><STRONG><a name="[90]"></a>__user_libspace</STRONG> (Thumb, 8 bytes, Stack size 0 bytes, libspace.o(.text), UNUSED)
+<P><STRONG><a name="[92]"></a>__user_libspace</STRONG> (Thumb, 8 bytes, Stack size 0 bytes, libspace.o(.text), UNUSED)
 
 <P><STRONG><a name="[44]"></a>__user_perproc_libspace</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, libspace.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[30]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__user_setup_stackheap
 </UL>
 
-<P><STRONG><a name="[91]"></a>__user_perthread_libspace</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, libspace.o(.text), UNUSED)
+<P><STRONG><a name="[93]"></a>__user_perthread_libspace</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, libspace.o(.text), UNUSED)
 
 <P><STRONG><a name="[3d]"></a>__Heap_ProvideMemory</STRONG> (Thumb, 52 bytes, Stack size 8 bytes, h1_extend.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = __Heap_ProvideMemory &rArr; free
@@ -445,7 +437,7 @@ Global Symbols
 <LI><a href="#[3c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__Heap_Full
 </UL>
 
-<P><STRONG><a name="[92]"></a>_maybe_terminate_alloc</STRONG> (Thumb, 0 bytes, Stack size 8 bytes, maybetermalloc1.o(.text), UNUSED)
+<P><STRONG><a name="[94]"></a>_maybe_terminate_alloc</STRONG> (Thumb, 0 bytes, Stack size 8 bytes, maybetermalloc1.o(.text), UNUSED)
 
 <P><STRONG><a name="[3f]"></a>__rt_SIGRTMEM</STRONG> (Thumb, 12 bytes, Stack size 8 bytes, defsig_rtmem_outer.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = __rt_SIGRTMEM &rArr; __rt_SIGRTMEM_inner &rArr; __default_signal_display &rArr; _ttywrch
@@ -457,11 +449,11 @@ Global Symbols
 <LI><a href="#[3e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__Heap_Broken
 </UL>
 
-<P><STRONG><a name="[93]"></a>__I$use$semihosting</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, use_no_semi.o(.text), UNUSED)
+<P><STRONG><a name="[95]"></a>__I$use$semihosting</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, use_no_semi.o(.text), UNUSED)
 
-<P><STRONG><a name="[94]"></a>__use_no_semihosting_swi</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, use_no_semi.o(.text), UNUSED)
+<P><STRONG><a name="[96]"></a>__use_no_semihosting_swi</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, use_no_semi.o(.text), UNUSED)
 
-<P><STRONG><a name="[95]"></a>__semihosting_library_function</STRONG> (Thumb, 0 bytes, Stack size 8 bytes, indicate_semi.o(.text), UNUSED)
+<P><STRONG><a name="[97]"></a>__semihosting_library_function</STRONG> (Thumb, 0 bytes, Stack size 8 bytes, indicate_semi.o(.text), UNUSED)
 
 <P><STRONG><a name="[30]"></a>__user_setup_stackheap</STRONG> (Thumb, 62 bytes, Stack size 8 bytes, sys_stackheap_outer.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8 + Unknown Stack Size
@@ -518,40 +510,53 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[47]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__default_signal_display
 </UL>
 
-<P><STRONG><a name="[20]"></a>SPI2_IRQHandler</STRONG> (Thumb, 32 bytes, Stack size 16 bytes, main.o(.text.SPI2_IRQHandler))
+<P><STRONG><a name="[49]"></a>ReadSensors</STRONG> (Thumb, 76 bytes, Stack size 16 bytes, main.o(.text.ReadSensors))
+<BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = ReadSensors &rArr; ResetSensors
+</UL>
+<BR>[Calls]<UL><LI><a href="#[4a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ResetSensors
+<LI><a href="#[4b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__NVIC_EnableIRQ
+</UL>
+<BR>[Called By]<UL><LI><a href="#[34]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
+</UL>
+
+<P><STRONG><a name="[4a]"></a>ResetSensors</STRONG> (Thumb, 64 bytes, Stack size 8 bytes, main.o(.text.ResetSensors))
+<BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = ResetSensors
+</UL>
+<BR>[Called By]<UL><LI><a href="#[49]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ReadSensors
+</UL>
+
+<P><STRONG><a name="[20]"></a>SPI2_IRQHandler</STRONG> (Thumb, 36 bytes, Stack size 16 bytes, main.o(.text.SPI2_IRQHandler))
 <BR><BR>[Stack]<UL><LI>Max Depth = 44<LI>Call Chain = SPI2_IRQHandler &rArr; renderInt &rArr; drawRow
 </UL>
-<BR>[Calls]<UL><LI><a href="#[4a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;resetBitV
-<LI><a href="#[49]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;renderInt
+<BR>[Calls]<UL><LI><a href="#[4d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;resetBitV
+<LI><a href="#[4c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;renderInt
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f072xb.o(RESET)
 </UL>
 <P><STRONG><a name="[5]"></a>SysTick_Handler</STRONG> (Thumb, 24 bytes, Stack size 8 bytes, main.o(.text.SysTick_Handler))
 <BR><BR>[Stack]<UL><LI>Max Depth = 92<LI>Call Chain = SysTick_Handler &rArr; fetchButtons &rArr; trySet
 </UL>
-<BR>[Calls]<UL><LI><a href="#[4d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fetchButtons
+<BR>[Calls]<UL><LI><a href="#[50]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fetchButtons
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f072xb.o(RESET)
 </UL>
-<P><STRONG><a name="[4e]"></a>SystemCoreClockUpdate</STRONG> (Thumb, 248 bytes, Stack size 32 bytes, system_stm32f0xx.o(.text.SystemCoreClockUpdate))
+<P><STRONG><a name="[51]"></a>SystemCoreClockUpdate</STRONG> (Thumb, 248 bytes, Stack size 32 bytes, system_stm32f0xx.o(.text.SystemCoreClockUpdate))
 <BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = SystemCoreClockUpdate
 </UL>
-<BR>[Calls]<UL><LI><a href="#[4f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uidiv
+<BR>[Calls]<UL><LI><a href="#[52]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uidiv
 </UL>
-<BR>[Called By]<UL><LI><a href="#[54]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;init
+<BR>[Called By]<UL><LI><a href="#[55]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;init
 </UL>
 
 <P><STRONG><a name="[26]"></a>SystemInit</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, system_stm32f0xx.o(.text.SystemInit))
-<BR><BR>[Called By]<UL><LI><a href="#[54]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;init
+<BR><BR>[Called By]<UL><LI><a href="#[55]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;init
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f072xb.o(.text)
 </UL>
-<P><STRONG><a name="[e]"></a>TSC_IRQHandler</STRONG> (Thumb, 144 bytes, Stack size 32 bytes, main.o(.text.TSC_IRQHandler))
-<BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = TSC_IRQHandler &rArr; __aeabi_idivmod
+<P><STRONG><a name="[e]"></a>TSC_IRQHandler</STRONG> (Thumb, 312 bytes, Stack size 32 bytes, main.o(.text.TSC_IRQHandler))
+<BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = TSC_IRQHandler &rArr; drawSpiPos
 </UL>
-<BR>[Calls]<UL><LI><a href="#[50]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_idivmod
-<LI><a href="#[52]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_idiv
-<LI><a href="#[51]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;drawSpiPos
+<BR>[Calls]<UL><LI><a href="#[53]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;drawSpiPos
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f072xb.o(RESET)
 </UL>
@@ -565,38 +570,38 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;loop
 </UL>
 
-<P><STRONG><a name="[63]"></a>drawRow</STRONG> (Thumb, 44 bytes, Stack size 12 bytes, main.o(.text.drawRow))
+<P><STRONG><a name="[63]"></a>drawRow</STRONG> (Thumb, 40 bytes, Stack size 12 bytes, main.o(.text.drawRow))
 <BR><BR>[Stack]<UL><LI>Max Depth = 12<LI>Call Chain = drawRow
 </UL>
-<BR>[Called By]<UL><LI><a href="#[49]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;renderInt
+<BR>[Called By]<UL><LI><a href="#[4c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;renderInt
 </UL>
 
-<P><STRONG><a name="[54]"></a>init</STRONG> (Thumb, 180 bytes, Stack size 24 bytes, main.o(.text.init))
+<P><STRONG><a name="[55]"></a>init</STRONG> (Thumb, 180 bytes, Stack size 24 bytes, main.o(.text.init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 72<LI>Call Chain = init &rArr; SysTick_Config &rArr; __NVIC_SetPriority
 </UL>
-<BR>[Calls]<UL><LI><a href="#[4f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uidiv
-<LI><a href="#[59]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;touch_init
-<LI><a href="#[55]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;resetAll
-<LI><a href="#[58]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;initPong
+<BR>[Calls]<UL><LI><a href="#[52]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uidiv
+<LI><a href="#[5a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;touch_init
+<LI><a href="#[56]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;resetAll
+<LI><a href="#[59]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;initPong
 <LI><a href="#[26]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SystemInit
-<LI><a href="#[4e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SystemCoreClockUpdate
-<LI><a href="#[56]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;resetBtns
-<LI><a href="#[57]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;initSPI
-<LI><a href="#[4b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SysTick_Config
+<LI><a href="#[51]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SystemCoreClockUpdate
+<LI><a href="#[57]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;resetBtns
+<LI><a href="#[58]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;initSPI
+<LI><a href="#[4e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SysTick_Config
 </UL>
 <BR>[Called By]<UL><LI><a href="#[34]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[58]"></a>initPong</STRONG> (Thumb, 84 bytes, Stack size 0 bytes, main.o(.text.initPong))
-<BR><BR>[Called By]<UL><LI><a href="#[54]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;init
+<P><STRONG><a name="[59]"></a>initPong</STRONG> (Thumb, 84 bytes, Stack size 0 bytes, main.o(.text.initPong))
+<BR><BR>[Called By]<UL><LI><a href="#[55]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;init
 </UL>
 
-<P><STRONG><a name="[5b]"></a>lateTSCinit</STRONG> (Thumb, 52 bytes, Stack size 8 bytes, main.o(.text.lateTSCinit))
+<P><STRONG><a name="[5b]"></a>lateTSCinit</STRONG> (Thumb, 40 bytes, Stack size 8 bytes, main.o(.text.lateTSCinit))
 <BR><BR>[Stack]<UL><LI>Max Depth = 12<LI>Call Chain = lateTSCinit &rArr; __NVIC_EnableIRQ
 </UL>
-<BR>[Calls]<UL><LI><a href="#[5a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__NVIC_EnableIRQ
+<BR>[Calls]<UL><LI><a href="#[4b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__NVIC_EnableIRQ
 </UL>
-<BR>[Called By]<UL><LI><a href="#[59]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;touch_init
+<BR>[Called By]<UL><LI><a href="#[5a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;touch_init
 </UL>
 
 <P><STRONG><a name="[5c]"></a>loop</STRONG> (Thumb, 36 bytes, Stack size 16 bytes, main.o(.text.loop))
@@ -610,25 +615,26 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[34]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[34]"></a>main</STRONG> (Thumb, 40 bytes, Stack size 24 bytes, main.o(.text.main))
+<P><STRONG><a name="[34]"></a>main</STRONG> (Thumb, 52 bytes, Stack size 24 bytes, main.o(.text.main))
 <BR><BR>[Stack]<UL><LI>Max Depth = 96<LI>Call Chain = main &rArr; init &rArr; SysTick_Config &rArr; __NVIC_SetPriority
 </UL>
 <BR>[Calls]<UL><LI><a href="#[3a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;malloc
 <LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;loop
-<LI><a href="#[54]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;init
+<LI><a href="#[55]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;init
+<LI><a href="#[49]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ReadSensors
 </UL>
 <BR>[Called By]<UL><LI><a href="#[33]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__rt_entry_main
 </UL>
 
 <P><STRONG><a name="[62]"></a>renderBegin</STRONG> (Thumb, 16 bytes, Stack size 0 bytes, main.o(.text.renderBegin))
-<BR><BR>[Called By]<UL><LI><a href="#[49]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;renderInt
+<BR><BR>[Called By]<UL><LI><a href="#[4c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;renderInt
 </UL>
 
 <P><STRONG><a name="[61]"></a>renderFlush</STRONG> (Thumb, 20 bytes, Stack size 0 bytes, main.o(.text.renderFlush))
-<BR><BR>[Called By]<UL><LI><a href="#[49]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;renderInt
+<BR><BR>[Called By]<UL><LI><a href="#[4c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;renderInt
 </UL>
 
-<P><STRONG><a name="[49]"></a>renderInt</STRONG> (Thumb, 116 bytes, Stack size 16 bytes, main.o(.text.renderInt))
+<P><STRONG><a name="[4c]"></a>renderInt</STRONG> (Thumb, 116 bytes, Stack size 16 bytes, main.o(.text.renderInt))
 <BR><BR>[Stack]<UL><LI>Max Depth = 28<LI>Call Chain = renderInt &rArr; drawRow
 </UL>
 <BR>[Calls]<UL><LI><a href="#[61]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;renderFlush
@@ -638,24 +644,24 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[20]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI2_IRQHandler
 </UL>
 
-<P><STRONG><a name="[55]"></a>resetAll</STRONG> (Thumb, 48 bytes, Stack size 4 bytes, main.o(.text.resetAll))
+<P><STRONG><a name="[56]"></a>resetAll</STRONG> (Thumb, 48 bytes, Stack size 4 bytes, main.o(.text.resetAll))
 <BR><BR>[Stack]<UL><LI>Max Depth = 4<LI>Call Chain = resetAll
 </UL>
-<BR>[Called By]<UL><LI><a href="#[54]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;init
+<BR>[Called By]<UL><LI><a href="#[55]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;init
 </UL>
 
-<P><STRONG><a name="[4a]"></a>resetBitV</STRONG> (Thumb, 20 bytes, Stack size 8 bytes, main.o(.text.resetBitV))
+<P><STRONG><a name="[4d]"></a>resetBitV</STRONG> (Thumb, 20 bytes, Stack size 8 bytes, main.o(.text.resetBitV))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = resetBitV
 </UL>
 <BR>[Called By]<UL><LI><a href="#[20]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI2_IRQHandler
 </UL>
 
-<P><STRONG><a name="[59]"></a>touch_init</STRONG> (Thumb, 136 bytes, Stack size 8 bytes, main.o(.text.touch_init))
-<BR><BR>[Stack]<UL><LI>Max Depth = 20<LI>Call Chain = touch_init &rArr; lateTSCinit &rArr; __NVIC_EnableIRQ
+<P><STRONG><a name="[5a]"></a>touch_init</STRONG> (Thumb, 164 bytes, Stack size 24 bytes, main.o(.text.touch_init))
+<BR><BR>[Stack]<UL><LI>Max Depth = 36<LI>Call Chain = touch_init &rArr; lateTSCinit &rArr; __NVIC_EnableIRQ
 </UL>
 <BR>[Calls]<UL><LI><a href="#[5b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lateTSCinit
 </UL>
-<BR>[Called By]<UL><LI><a href="#[54]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;init
+<BR>[Called By]<UL><LI><a href="#[55]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;init
 </UL>
 
 <P><STRONG><a name="[60]"></a>wait</STRONG> (Thumb, 40 bytes, Stack size 8 bytes, main.o(.text.wait))
@@ -667,25 +673,26 @@ Global Symbols
 <H3>
 Local Symbols
 </H3>
-<P><STRONG><a name="[4b]"></a>SysTick_Config</STRONG> (Thumb, 84 bytes, Stack size 24 bytes, main.o(.text.SysTick_Config))
+<P><STRONG><a name="[4e]"></a>SysTick_Config</STRONG> (Thumb, 84 bytes, Stack size 24 bytes, main.o(.text.SysTick_Config))
 <BR><BR>[Stack]<UL><LI>Max Depth = 48<LI>Call Chain = SysTick_Config &rArr; __NVIC_SetPriority
 </UL>
-<BR>[Calls]<UL><LI><a href="#[4c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__NVIC_SetPriority
+<BR>[Calls]<UL><LI><a href="#[4f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__NVIC_SetPriority
 </UL>
-<BR>[Called By]<UL><LI><a href="#[54]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;init
+<BR>[Called By]<UL><LI><a href="#[55]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;init
 </UL>
 
-<P><STRONG><a name="[5a]"></a>__NVIC_EnableIRQ</STRONG> (Thumb, 44 bytes, Stack size 4 bytes, main.o(.text.__NVIC_EnableIRQ))
+<P><STRONG><a name="[4b]"></a>__NVIC_EnableIRQ</STRONG> (Thumb, 44 bytes, Stack size 4 bytes, main.o(.text.__NVIC_EnableIRQ))
 <BR><BR>[Stack]<UL><LI>Max Depth = 4<LI>Call Chain = __NVIC_EnableIRQ
 </UL>
 <BR>[Called By]<UL><LI><a href="#[5b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lateTSCinit
-<LI><a href="#[57]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;initSPI
+<LI><a href="#[49]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ReadSensors
+<LI><a href="#[58]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;initSPI
 </UL>
 
-<P><STRONG><a name="[4c]"></a>__NVIC_SetPriority</STRONG> (Thumb, 136 bytes, Stack size 24 bytes, main.o(.text.__NVIC_SetPriority))
+<P><STRONG><a name="[4f]"></a>__NVIC_SetPriority</STRONG> (Thumb, 136 bytes, Stack size 24 bytes, main.o(.text.__NVIC_SetPriority))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = __NVIC_SetPriority
 </UL>
-<BR>[Called By]<UL><LI><a href="#[4b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SysTick_Config
+<BR>[Called By]<UL><LI><a href="#[4e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SysTick_Config
 </UL>
 
 <P><STRONG><a name="[5f]"></a>clearImage</STRONG> (Thumb, 40 bytes, Stack size 4 bytes, main.o(.text.clearImage))
@@ -694,38 +701,38 @@ Local Symbols
 <BR>[Called By]<UL><LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;loop
 </UL>
 
-<P><STRONG><a name="[51]"></a>drawSpiPos</STRONG> (Thumb, 76 bytes, Stack size 8 bytes, main.o(.text.drawSpiPos))
+<P><STRONG><a name="[53]"></a>drawSpiPos</STRONG> (Thumb, 76 bytes, Stack size 8 bytes, main.o(.text.drawSpiPos))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = drawSpiPos
 </UL>
 <BR>[Called By]<UL><LI><a href="#[e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TSC_IRQHandler
 </UL>
 
-<P><STRONG><a name="[4d]"></a>fetchButtons</STRONG> (Thumb, 292 bytes, Stack size 72 bytes, main.o(.text.fetchButtons))
+<P><STRONG><a name="[50]"></a>fetchButtons</STRONG> (Thumb, 292 bytes, Stack size 72 bytes, main.o(.text.fetchButtons))
 <BR><BR>[Stack]<UL><LI>Max Depth = 84<LI>Call Chain = fetchButtons &rArr; trySet
 </UL>
-<BR>[Calls]<UL><LI><a href="#[53]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;trySet
+<BR>[Calls]<UL><LI><a href="#[54]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;trySet
 </UL>
 <BR>[Called By]<UL><LI><a href="#[5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SysTick_Handler
 </UL>
 
-<P><STRONG><a name="[57]"></a>initSPI</STRONG> (Thumb, 156 bytes, Stack size 16 bytes, main.o(.text.initSPI))
+<P><STRONG><a name="[58]"></a>initSPI</STRONG> (Thumb, 152 bytes, Stack size 16 bytes, main.o(.text.initSPI))
 <BR><BR>[Stack]<UL><LI>Max Depth = 20<LI>Call Chain = initSPI &rArr; __NVIC_EnableIRQ
 </UL>
-<BR>[Calls]<UL><LI><a href="#[5a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__NVIC_EnableIRQ
+<BR>[Calls]<UL><LI><a href="#[4b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__NVIC_EnableIRQ
 </UL>
-<BR>[Called By]<UL><LI><a href="#[54]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;init
+<BR>[Called By]<UL><LI><a href="#[55]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;init
 </UL>
 
-<P><STRONG><a name="[56]"></a>resetBtns</STRONG> (Thumb, 68 bytes, Stack size 4 bytes, main.o(.text.resetBtns))
+<P><STRONG><a name="[57]"></a>resetBtns</STRONG> (Thumb, 68 bytes, Stack size 4 bytes, main.o(.text.resetBtns))
 <BR><BR>[Stack]<UL><LI>Max Depth = 4<LI>Call Chain = resetBtns
 </UL>
-<BR>[Called By]<UL><LI><a href="#[54]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;init
+<BR>[Called By]<UL><LI><a href="#[55]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;init
 </UL>
 
-<P><STRONG><a name="[53]"></a>trySet</STRONG> (Thumb, 82 bytes, Stack size 12 bytes, main.o(.text.trySet))
+<P><STRONG><a name="[54]"></a>trySet</STRONG> (Thumb, 82 bytes, Stack size 12 bytes, main.o(.text.trySet))
 <BR><BR>[Stack]<UL><LI>Max Depth = 12<LI>Call Chain = trySet
 </UL>
-<BR>[Called By]<UL><LI><a href="#[4d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fetchButtons
+<BR>[Called By]<UL><LI><a href="#[50]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fetchButtons
 </UL>
 <P>
 <H3>

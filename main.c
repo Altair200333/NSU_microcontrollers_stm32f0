@@ -139,6 +139,7 @@ int main(void)
 	
 	while(1)
 	{
+		ReadSensors(&Result);
 		loop(context);
 	}
 }

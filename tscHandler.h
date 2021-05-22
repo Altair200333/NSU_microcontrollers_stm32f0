@@ -26,10 +26,10 @@ void touch_init(void)
 	
 	RCC->AHBENR |= RCC_AHBENR_GPIOAEN | RCC_AHBENR_GPIOBEN | RCC_AHBENR_GPIOCEN;
 	
-	GPIOA->MODER |= (0x2 << (2*1)) + (0x2 << (2*2)); //enable AF for PA1 and PA2
+	GPIOA->MODER |= (0x2 << (2*2)) + (0x2 << (2*3)); //enable AF for PA1 and PA2
 	
 	
-	GPIOA->AFR[0] |= (0x3 << (4*1)) + (0x3 << (4*2)); //enable AF3 for PA1 and PA2
+	GPIOA->AFR[0] |= (0x3 << (4*2)) + (0x3 << (4*3)); //enable AF3 for PA2 and PA3
 	GPIOA->OTYPER |= (1<<3);
 		
 	RCC->AHBENR |= RCC_AHBENR_TSEN;

@@ -22,9 +22,9 @@ static void initSPI()
 	RCC->APB1ENR |= RCC_APB1ENR_SPI2EN; 
 	
 	// Set Alternate function 1 to pin 
-	GPIOB->AFR[1] = 0 << (15 - 8) * 4;
+	GPIOB->AFR[1] |= 0 << (15 - 8) * 4;
 	// Set alternate func 1 (AF0) to pin 13
-	GPIOB->AFR[1] = 0 << (13 - 8) * 4;
+	GPIOB->AFR[1] |= 0 << (13 - 8) * 4;
 	
 	SPI2->CR1 = 
 		  SPI_CR1_SSM 

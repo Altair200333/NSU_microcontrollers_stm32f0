@@ -3,21 +3,6 @@
 #include "renderAPI.h"
 #include <math.h>
 
-#define IRQ (1)
-#define CS (6)
-#define CLR_CS (GPIOA->ODR &= ~(1 << CS))
-#define SET_CS (GPIOA->ODR |= (1 << CS))
-
-#define XMIN (360)
-#define XMAX (3900)
-#define YMIN (230)
-#define YMAX (3840)
-#define WIDTH (320)
-#define HEIGHT (240)
-
-#define X(x) ((x-XMIN)*WIDTH/(XMAX-XMIN))
-#define Y(y) ((y-YMIN)*HEIGHT/(YMAX-YMIN))
-
 void TSC_IRQHandler(void)
 {
 	if ((TSC->ISR & TSC_ISR_EOAF) == TSC_ISR_EOAF)
@@ -30,19 +15,23 @@ void TSC_IRQHandler(void)
 		//}
 	  uint32_t AcquisitionValue = TSC->IOGXCR[1]; /* Get G2 counter value */
 		drawSpiPos(6,(AcquisitionValue%8));
-		
-		TSC->CR |= TSC_CR_START; //what?
+
+		TSC->CR |= TSC_CR_START;
 	}
 }
-
+//GPIOA->AFR[0] |= 3 << (0) * 4;
+//alt.func. number ^;pin.^;   ^ - always the same
 void touch_init(void) 
 {
-	RCC->AHBENR |= RCC_AHBENR_GPIOAEN | RCC_AHBENR_GPIOBEN;
+	
+	RCC->AHBENR |= RCC_AHBENR_GPIOAEN | RCC_AHBENR_GPIOBEN | RCC_AHBENR_GPIOCEN;
 	
 	GPIOA->MODER |= (0x2 << (2*1)) + (0x2 << (2*2)); //enable AF for PA1 and PA2
+	
+	
 	GPIOA->AFR[0] |= (0x3 << (4*1)) + (0x3 << (4*2)); //enable AF3 for PA1 and PA2
 	GPIOA->OTYPER |= (1<<3);
-	
+		
 	RCC->AHBENR |= RCC_AHBENR_TSEN;
 	
 	TSC->IOSCR |= TSC_IOSCR_G2_IO4; //enable G1_IO4 as sampling capacitor
@@ -51,10 +40,11 @@ void touch_init(void)
 	TSC->IOGCSR |= TSC_IOGCSR_G2E; //enable G1 analog group
 	
 	TSC->IOHCR &= (uint32_t)(~(TSC_IOHCR_G2_IO4 | TSC_IOHCR_G2_IO3)); //disable hysteresis on PA1 and PA2 
-	
+		
 	TSC->IER |= TSC_IER_EOAIE; //enable end of acquisition interrupt
 	NVIC_EnableIRQ(TSC_IRQn);
 	
-	TSC->CR |= 0x01 + 0x00C0 + 0x02; //enable TSC and start acquisition //TSC_CR_TSCE | TSC_CR_START
+	TSC->CR |= TSC_CR_PGPSC_2 | TSC_CR_PGPSC_0 | TSC_CR_CTPH_0 | TSC_CR_CTPL_0 | TSC_CR_MCV_2 | TSC_CR_MCV_1 | TSC_CR_TSCE;
+	TSC->CR |= TSC_CR_START;//(0x01 + 0x00C0 + 0x02); //enable TSC and start acquisition //TSC_CR_TSCE | TSC_CR_START
 }
 

@@ -17,11 +17,12 @@ static volatile bool _debug = true;
 
 static volatile uint32_t raw_result = 0;
 
-typedef struct{
-uint32_t   s[3];
-uint8_t      i;
-uint8_t      ready;
-}TSC_RESULT;
+typedef struct
+{
+	uint32_t   s[3];
+	uint8_t      i;
+	uint8_t      ready;
+} TSC_RESULT;
 
 TSC_RESULT Result;
 
@@ -34,6 +35,7 @@ void ResetSensors(TSC_RESULT *pResult)
 	pResult->ready=0;
 }
 
+//363-365
 void ReadSensors(TSC_RESULT *pResult)
 {
 	raw_result =  (Result.s[0] + Result.s[1] + Result.s[2])/3;
@@ -44,13 +46,22 @@ void ReadSensors(TSC_RESULT *pResult)
 		drawSpiPos(1, Result.s[1]%8);
 		drawSpiPos(2, Result.s[2]%8);
 		drawSpiPos(4, raw_result%8);
+		//int n = raw_result;
+		//int i = 0;
+		//while (n != 0) {
+		//	int tmp = n%10;
+		//	drawSpiPos(i,tmp);
+		//
+		//	n /= 10;
+		//	++i;
+		//}
 	}
 	
 	ResetSensors(pResult); 
 	TSC->IOGCSR &= ~b11111111;
-	TSC->IOGCSR |= TSC_IOGCSR_G1E; 
+	TSC->IOGCSR |= TSC_IOGCSR_G3E; 
 	TSC->IOCCR &= ~b1111; 
-	TSC->IOCCR |= TSC_IOCCR_G1_IO1;
+	TSC->IOCCR |= TSC_IOCCR_G3_IO1;
 	__enable_irq ();
 	
 	NVIC_EnableIRQ(TSC_IRQn);//bind interruput
@@ -75,17 +86,17 @@ void TSC_IRQHandler(void)
   switch (Result.i)
 	{
   case 0: 
-    Result.s[0] = TSC -> IOGXCR[0];
+    Result.s[0] = TSC -> IOGXCR[2];
     TSC -> IOCCR &= ~b1111; 
-    TSC -> IOCCR |= TSC_IOCCR_G1_IO2;
+    TSC -> IOCCR |= TSC_IOCCR_G3_IO2;
     break;
   case 1:
-    Result.s[1] = TSC -> IOGXCR[0];
+    Result.s[1] = TSC -> IOGXCR[2];
     TSC -> IOCCR &= ~b1111;
-    TSC -> IOCCR |= TSC_IOCCR_G1_IO3;
+    TSC -> IOCCR |= TSC_IOCCR_G3_IO4;
     break;
   case 2:
-    Result.s[2] = TSC -> IOGXCR[0];
+    Result.s[2] = TSC -> IOGXCR[2];
     TSC -> IOCCR &= ~b1111;
     break;
   }
@@ -95,6 +106,7 @@ void TSC_IRQHandler(void)
     Result.ready = 0;
   } else {
     Result.ready = 1;
+		drawSpiPos(5,4);
   }	
 }
 
@@ -116,7 +128,7 @@ void lateTSCinit()
       | (0 << TSC_CR_SYNCPOL_Pos)      // Synchronization pin polarity
       | (0 << TSC_CR_AM_Pos)            // Acquisition mode: 0: Normal acquisition mode / 1: Synchronized acquisition mode
       | (0 << TSC_CR_START_Pos)         // Start a new acquisition: 0 (hard): Acquisition not started / 1 (soft): Start a new acquisition
-      | TSC_CR_TSCE;         // Touch sensing controller enable: 0: disabled / 1: enabled
+      | TSC_CR_TSCE;            // Touch sensing controller enable: 0: disabled / 1: enabled
 	//TSC->CR |= TSC_CR_START;//(0x01 + 0x00C0 + 0x02); //enable TSC and start acquisition
 	//TSC->CR |= TSC_CR_AM;
 
@@ -125,32 +137,38 @@ void lateTSCinit()
 //alt.func. number ^;pin.^;   ^ - always the same
 void touch_init(void) 
 {
-	//PA7  PA6
 	RCC->AHBENR |= RCC_AHBENR_GPIOAEN;
-	
-	GPIOA->MODER &= ~(GPIO_MODER_MODER0_Msk | GPIO_MODER_MODER1_Msk | GPIO_MODER_MODER2_Msk | GPIO_MODER_MODER3_Msk);
-	GPIOA->MODER |=  GPIO_MODER_MODER0_1 | GPIO_MODER_MODER1_1 | GPIO_MODER_MODER2_1 | GPIO_MODER_MODER3_1;
-	
-	
-	GPIOA->AFR[0] &= ~(GPIO_AFRL_AFSEL0 | GPIO_AFRL_AFSEL1 | GPIO_AFRL_AFSEL2 | GPIO_AFRL_AFSEL3);
-	GPIOA->AFR[0] |= (b11 << GPIO_AFRL_AFSEL0_Pos) | (b11 << GPIO_AFRL_AFSEL1_Pos) | (b11 << GPIO_AFRL_AFSEL2_Pos) | (b11 << GPIO_AFRL_AFSEL3_Pos);
+	RCC->AHBENR |= RCC_AHBENR_GPIOBEN | RCC_AHBENR_GPIOCEN;
 
-	//GPIOA->AFR[0] |= (3 << (0) * 4) + (3 << (1) * 4) + (3 << (2) * 4) + (3 << (3) * 4);
+	GPIOB->MODER &= ~(GPIO_MODER_MODER0_Msk | GPIO_MODER_MODER1_Msk | GPIO_MODER_MODER2_Msk);
+	GPIOC->MODER &= ~(GPIO_MODER_MODER5_Msk);
 	
+	GPIOB->MODER |=  GPIO_MODER_MODER0_1 | GPIO_MODER_MODER1_1 | GPIO_MODER_MODER2_1;
+	GPIOC->MODER |=  GPIO_MODER_MODER5_1;
+	
+	GPIOB->AFR[0] &= ~(GPIO_AFRL_AFSEL0 | GPIO_AFRL_AFSEL1 | GPIO_AFRL_AFSEL2);
+	GPIOB->AFR[0] |= (b11 << GPIO_AFRL_AFSEL0_Pos) | (b11 << GPIO_AFRL_AFSEL1_Pos) | (b11 << GPIO_AFRL_AFSEL2_Pos);
+	
+	GPIOC->AFR[0] &= ~(GPIO_AFRL_AFSEL5);
+	GPIOC->AFR[0] |= (0 << GPIO_AFRL_AFSEL5_Pos);
+
 	RCC->AHBENR |= RCC_AHBENR_TSEN;//enable TS clock
 		
-	TSC->IOGCSR |= TSC_IOGCSR_G1E; //enable G2 analog group
+	TSC->IOGCSR |= TSC_IOGCSR_G3E; //enable GX analog group
 	
-	TSC->IOHCR &= (uint32_t)(~(TSC_IOHCR_G1_IO4 | TSC_IOHCR_G1_IO3 | TSC_IOHCR_G1_IO2 | TSC_IOHCR_G1_IO1)); //disable hysteresis on PA6 and PA7
+	TSC->IOHCR &= (uint32_t)(~(TSC_IOHCR_G3_IO4 | TSC_IOHCR_G3_IO3 | TSC_IOHCR_G3_IO2 | TSC_IOHCR_G3_IO1)); //disable hysteresis
 	
-	GPIOA->OTYPER |= (GPIO_OTYPER_OT_3); // OD
-	GPIOA->OTYPER &= ~(GPIO_OTYPER_OT_0 | GPIO_OTYPER_OT_1 | GPIO_OTYPER_OT_2); // PP
+	GPIOB->OTYPER |= (GPIO_OTYPER_OT_1); // OD
+	GPIOB->OTYPER &= ~(GPIO_OTYPER_OT_0 | GPIO_OTYPER_OT_2); // PP
+	GPIOC->OTYPER &= ~(GPIO_OTYPER_OT_5); // PP
 	
-	GPIOA->PUPDR &= ~(GPIO_PUPDR_PUPDR0 | GPIO_PUPDR_PUPDR1 | GPIO_PUPDR_PUPDR2 | GPIO_PUPDR_PUPDR3);
+	GPIOB->PUPDR &= ~(GPIO_PUPDR_PUPDR0 | GPIO_PUPDR_PUPDR1 | GPIO_PUPDR_PUPDR2);
+	GPIOC->PUPDR &= ~(GPIO_PUPDR_PUPDR5);
 
-	GPIOA->OSPEEDR |= (b11 << GPIO_OSPEEDR_OSPEEDR0_Pos) | (b11 << GPIO_OSPEEDR_OSPEEDR1_Pos) | (b11 << GPIO_OSPEEDR_OSPEEDR2_Pos) | (b11 << GPIO_OSPEEDR_OSPEEDR3_Pos);
+	GPIOB->OSPEEDR |= (b11 << GPIO_OSPEEDR_OSPEEDR0_Pos) | (b11 << GPIO_OSPEEDR_OSPEEDR1_Pos) | (b11 << GPIO_OSPEEDR_OSPEEDR2_Pos);
+	GPIOC->OSPEEDR |= (b11 << GPIO_OSPEEDR_OSPEEDR5_Pos);
 
 	lateTSCinit();
-	TSC->IOSCR |= TSC_IOSCR_G1_IO4; //enable G1_IO4 as sampling capacitor
+	TSC->IOSCR |= TSC_IOSCR_G3_IO3; //enable G1_IOX as sampling capacitor
 
 }

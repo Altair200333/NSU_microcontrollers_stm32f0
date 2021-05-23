@@ -1,6 +1,7 @@
 #pragma once
 #include <stdbool.h>
 #include "stdlib.h"
+#include <stm32f0xx.h>
 
 #define btn_delay 15
 
@@ -73,4 +74,21 @@ static void fetchButtons(volatile uint32_t timestamp)
 	GPIOC->ODR &= ~GPIO_ODR_12;
 	GPIOA->IDR &= ~GPIO_IDR_4;
 	GPIOA->IDR &= ~GPIO_IDR_5;
+}
+void initBtns()
+{
+	RCC->AHBENR |= RCC_AHBENR_GPIOCEN | RCC_AHBENR_GPIOAEN;	//PC6 - LED
+	
+	GPIOC->MODER &= ~GPIO_MODER_MODER0;
+	GPIOC->MODER |= GPIO_MODER_MODER6_0 | GPIO_MODER_MODER7_0 | GPIO_MODER_MODER8_0 | GPIO_MODER_MODER9_0;//enable ports
+	
+	GPIOC->OTYPER &= ~(GPIO_OTYPER_OT_8 | ~GPIO_OTYPER_OT_9);
+	GPIOC->PUPDR &= ~(GPIO_PUPDR_PUPDR8 | GPIO_PUPDR_PUPDR9);
+	//--------
+
+	GPIOA->MODER |= GPIO_MODER_MODER15_0;
+	GPIOA->MODER &= ~GPIO_MODER_MODER4;
+	GPIOA->MODER &= ~GPIO_MODER_MODER5;
+	GPIOA->PUPDR |= GPIO_PUPDR_PUPDR4_1 | GPIO_PUPDR_PUPDR5_1;
+	GPIOC->MODER |= GPIO_MODER_MODER12_0;
 }

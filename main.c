@@ -7,6 +7,7 @@
 #include "pingPong.h"
 #include "tscHandler.h"
 #include "leds.h"
+#include "usart_base.h"
 
 typedef struct 
 {
@@ -28,7 +29,7 @@ void SysTick_Init(void);
 void SysTick_Wait(uint32_t);
 void renderLoop(void);
 void DMA1_Channel1_IRQHandler(void);
-	
+
 #define F_CPU 		72000000UL	
 
 static volatile uint32_t timestamp = 0;
@@ -68,23 +69,7 @@ void resetAll()
 		GPIOC->MODER |= GPIO_MODER_MODER0+i;
 	}
 }
-void initBtns()
-{
-	RCC->AHBENR |= RCC_AHBENR_GPIOCEN | RCC_AHBENR_GPIOAEN;	//PC6 - LED
-	
-	GPIOC->MODER &= ~GPIO_MODER_MODER0;
-	GPIOC->MODER |= GPIO_MODER_MODER6_0 | GPIO_MODER_MODER7_0 | GPIO_MODER_MODER8_0 | GPIO_MODER_MODER9_0;//enable ports
-	
-	GPIOC->OTYPER &= ~(GPIO_OTYPER_OT_8 | ~GPIO_OTYPER_OT_9);
-	GPIOC->PUPDR &= ~(GPIO_PUPDR_PUPDR8 | GPIO_PUPDR_PUPDR9);
-	//--------
 
-	GPIOA->MODER |= GPIO_MODER_MODER15_0;
-	GPIOA->MODER &= ~GPIO_MODER_MODER4;
-	GPIOA->MODER &= ~GPIO_MODER_MODER5;
-	GPIOA->PUPDR |= GPIO_PUPDR_PUPDR4_1 | GPIO_PUPDR_PUPDR5_1;
-	GPIOC->MODER |= GPIO_MODER_MODER12_0;
-}
 void init(void)
 {
 	resetAll();
@@ -100,6 +85,8 @@ void init(void)
 	resetBtns();
 	initSPI();
 	initPong();
+	
+	ConstrTransfer(&transfer, false);
 }
 
 bool buttonDown()
@@ -125,9 +112,18 @@ void loop(Context* context)
 	{
 		//states[0] = true;
 	}
-	//_debug = false;
-	//onUpdatePong(timestamp);
-
+	_debug = false;
+	onUpdatePong(timestamp);
+	if (transfer.isTransmit)
+	{
+		transfer.data = (uint8_t)cursorY;
+		transmitMessage(&transfer);
+	}
+	else
+	{
+		receiveMessage(&transfer);
+		drawSpiPos(transfer.data, 0);
+	}
 	clientFlush();
 	clearImage();
 	wait(40);

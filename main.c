@@ -114,35 +114,35 @@ void loop(Context* context)
 	{
 		//states[0] = true;
 	}
-	_debug = false;
+	_debug = true;
 	//onUpdatePong(timestamp);
 	
-	if (transfer.isTransmit)
-	{
-		if(cntr == 3)
-			cntr = 0;
-		if(transmitFinished())
-		{
-			drawSpiPos(0, cntr);
-			transfer.data = (uint8_t)cntr;
-			transmitMessage();
-			cntr++;
-		}
-	}
-	else
-	{
-		if(receiveFinished())
-		{
-			receiveMessage();
-			drawSpiPos(0, transfer.data);
-			cntr++;
-		}
-	}
+	//if (transfer.isTransmit)
+	//{
+	//	if(cntr == 3)
+	//		cntr = 0;
+	//	if(transmitFinished())
+	//	{
+	//		drawSpiPos(0, cntr);
+	//		transfer.data = (uint8_t)cntr;
+	//		transmitMessage();
+	//		cntr++;
+	//	}
+	//}
+	//else
+	//{
+	//	if(receiveFinished())
+	//	{
+	//		receiveMessage();
+	//		drawSpiPos(0, transfer.data);
+	//		cntr++;
+	//	}
+	//}
 	
 	clientFlush();
 	clearImage();
 	
-	wait(400);
+	wait(20);
 }	
 
 int main(void)

@@ -174,53 +174,7 @@ void onUpdatePong(volatile uint32_t timestamp)
 			processInput();
 			lastUpdate = timestamp;
 		}
-		if(gameState.host)
-		{
-			if(gameState.phase==0)
-			{
-				if(!transfer.isTransmit)
-					setMode(true);
-				else
-				{
-					transfer.data = platformLeft.y;
-					transmitMessage();
-					gameState.phase = (gameState.phase+1)%2;
-				}
-			}
-			if(gameState.phase==1)
-			{
-				if(transfer.isTransmit)
-					setMode(false);
-				else
-				{
-					receiveMessage();
-					if(transfer.data!=0)
-					{
-						platformRight.y = transfer.data;
-					}
-					gameState.phase = (gameState.phase+1)%2;
-				}
-			}
-		}
-		if(!gameState.host)
-		{
-			if(gameState.phase==0)
-			{
-				if(receiveClient())
-					gameState.phase = (gameState.phase+1)%2;
-			}
-			if(gameState.phase==1)
-			{
-				if(!transfer.isTransmit)
-					setMode(true);
-				else
-				{
-					transfer.data = platformRight.y;
-					transmitMessage();
-					gameState.phase = (gameState.phase+1)%2;
-				}
-			}
-		}
+		
 		drawPlatform(&platformLeft);
 		drawPlatform(&platformRight);
 		drawSpiPos((int)round(ball.x), (int)round(ball.y));

@@ -39,22 +39,24 @@ void ResetSensors(TSC_RESULT *pResult)
 void ReadSensors(TSC_RESULT *pResult)
 {
 	raw_result =  (Result.s[0] + Result.s[1] + Result.s[2])/3;
-
+	int res = raw_result;
+	
 	if(_debug)
 	{
-		//drawSpiPos(0, Result.s[0]%8);
-		//drawSpiPos(1, Result.s[1]%8);
-		//drawSpiPos(2, Result.s[2]%8);
-		//drawSpiPos(4, raw_result%8);
-		int n = raw_result;
-		int i = 0;
-		while (n != 0) {
-			int tmp = n%10;
-			drawSpiPos(i,tmp);
-		
-			n /= 10;
-			++i;
-		}
+		drawSpiPos(0, Result.s[0]%8);
+		drawSpiPos(1, Result.s[1]%8);
+		drawSpiPos(2, Result.s[2]%8);
+		drawSpiPos(4, raw_result%8);
+		//int n = Result.s[2];
+		//int i = 0;
+		//while (n != 0) {
+		//	int tmp = n%10;
+		//	drawSpiPos(i,tmp);
+		//	res+=1;
+		//	n /= 10;
+		//	++i;
+		//}
+		//drawSpiPos(0, raw_result%8);
 	}
 	
 	ResetSensors(pResult); 
@@ -71,7 +73,8 @@ void ReadSensors(TSC_RESULT *pResult)
 
 void TSC_IRQHandler(void)
 {
-	if (TSC -> ISR & TSC_ISR_MCEF) { 
+	if (TSC -> ISR & TSC_ISR_MCEF) 
+	{ 
     TSC -> ICR |= (TSC_ICR_EOAIC | TSC_ICR_MCEIC);
   
     Result.s[0] = Result.s[1] = Result.s[2] = 0;
@@ -102,7 +105,7 @@ void TSC_IRQHandler(void)
   }
   Result.i++;
   if (Result.i < 3) {
-    TSC -> CR |= TSC_CR_START;
+    TSC -> CR |= TSC_ICR_EOAIC;
     Result.ready = 0;
   } else {
     Result.ready = 1;

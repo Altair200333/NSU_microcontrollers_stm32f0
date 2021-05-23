@@ -107,7 +107,7 @@ static int clamp(int val, int min,int max)
 }
 
 #define CHECK_BIT(var,pos) ((var) & (1<<(pos)))
-
+static volatile int cntr = 0;
 void loop(Context* context)
 {
 	if(buttonDown())
@@ -115,23 +115,34 @@ void loop(Context* context)
 		//states[0] = true;
 	}
 	_debug = false;
-	onUpdatePong(timestamp);
-	//if (transfer.isTransmit)
-	//{
-	//	//setMode(true);
-	//	transfer.data = (uint8_t)cursorY;
-	//	transmitMessage();
-	//}
-	//else
-	//{
-	//	//setMode(false);
-	//	receiveMessage();
-	//	drawSpiPos(transfer.data, 0);
-	//}
+	//onUpdatePong(timestamp);
+	
+	if (transfer.isTransmit)
+	{
+		if(cntr == 3)
+			cntr = 0;
+		if(transmitFinished())
+		{
+			drawSpiPos(0, cntr);
+			transfer.data = (uint8_t)cntr;
+			transmitMessage();
+			cntr++;
+		}
+	}
+	else
+	{
+		if(receiveFinished())
+		{
+			receiveMessage();
+			drawSpiPos(0, transfer.data);
+			cntr++;
+		}
+	}
+	
 	clientFlush();
 	clearImage();
 	
-	wait(15);
+	wait(400);
 }	
 
 int main(void)

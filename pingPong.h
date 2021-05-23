@@ -7,6 +7,7 @@
 #include <math.h>
 #include "leds.h"
 #include "usart_base.h"
+#include "bit_master.h"
 
 #define GAME 1
 #define MENU 0

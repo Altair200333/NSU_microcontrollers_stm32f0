@@ -79,25 +79,36 @@ void setMode(bool isTransmit)
 		initUsartTransferReceive();
 	}
 }
-void transmitMessage()
+bool transmitFinished()
+{
+	return (USART3->ISR & USART_ISR_TXE);
+}
+bool receiveFinished()
+{
+	return (USART3->ISR & USART_ISR_RXNE);
+}
+bool transmitMessage()
 {
 	//while(!(USART1->ISR & USART_ISR_TC));
-	if ((USART3->ISR & USART_ISR_TC))
+	if ((USART3->ISR & USART_ISR_TXE))
 	{
 			/* clear transfer complete flag and fill TDR with a new char */
 			USART3->TDR = transfer.data;
 			USART3->ICR |= USART_ICR_TCCF;
+
+			//while(!((USART3->ISR & USART_ISR_TXE))){}
+			return true;
 	}
-	
-	
+	return false;
 }
 
-void receiveMessage()
+bool receiveMessage()
 {
 	int g = 0;
 	if ((USART3->ISR & USART_ISR_RXNE))
 	{
 		transfer.data = (uint8_t)(USART3->RDR); /* Receive data, clear flag */
+		return true;
 	}
-	
+	return false;
 }

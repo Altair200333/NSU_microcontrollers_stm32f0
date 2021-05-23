@@ -88,7 +88,7 @@ void init(void)
 	initPong();
 	initializeTimer();
 	
-	ConstrTransfer(&transfer, false);
+	ConstrTransfer(false);
 }
 
 bool buttonDown()
@@ -116,19 +116,20 @@ void loop(Context* context)
 	}
 	_debug = false;
 	onUpdatePong(timestamp);
-	if (transfer.isTransmit)
-	{
-		transfer.data = (uint8_t)cursorY;
-		transmitMessage(&transfer);
-	}
-	else
-	{
-		receiveMessage(&transfer);
-		drawSpiPos(transfer.data, 0);
-	}
+	//if (transfer.isTransmit)
+	//{
+	//	transfer.data = (uint8_t)cursorY;
+	//	transmitMessage();
+	//}
+	//else
+	//{
+	//	receiveMessage();
+	//	drawSpiPos(transfer.data, 0);
+	//}
 	clientFlush();
 	clearImage();
-	wait(40);
+	
+	wait(13);
 }	
 
 int main(void)

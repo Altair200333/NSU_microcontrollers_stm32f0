@@ -6,6 +6,7 @@
 #include "renderAPI.h"
 #include <math.h>
 #include "leds.h"
+#include "usart_base.h"
 
 #define GAME 1
 #define MENU 0
@@ -31,7 +32,8 @@ typedef struct
 	int mode;
 	short side;//0 - left; 1 - right
 	bool single;
-	
+	bool host;
+	uint32_t phase;
 } GameState;
 
 volatile static GameState gameState;
@@ -85,7 +87,7 @@ void updateBall()
 		}
 		else
 		{
-			setBitV(&LED, Bled);
+			//setBitV(&LED, Bled);
 			ball.x = 3;
 			ball.y = 3;
 		}
@@ -95,7 +97,6 @@ void updateBall()
 }
 void processInput()
 {
-	
 	if(keyStates[Key_Up].state && controlled->y+controlled->width+1<8)
 	{
 		controlled->y += 1;
@@ -146,33 +147,65 @@ void drawMenu()
 		drawSpiPos(7,1);
 	}
 }
+static volatile uint32_t lastUpdate = 0;
 void onUpdatePong(volatile uint32_t timestamp)
 {
 	if(gameState.mode == GAME)
 	{
-		updateBall();
-
+		if(gameState.phase==0)
+		{
+			updateBall();
+			processInput();
+		}
+		else if(gameState.phase==1)
+		{
+			if(gameState.host)
+			{
+				transfer.data = platformLeft.y;
+				transmitMessage();
+			}
+			else
+			{
+				receiveMessage();
+				platformLeft.y = transfer.data;
+			}
+		}
 		drawPlatform(&platformLeft);
 		drawPlatform(&platformRight);
 		drawSpiPos((int)round(ball.x), (int)round(ball.y));
-
-		processInput();
 	}
 	else if(gameState.mode == MENU)
 	{
-		if(keyStates[Key_Up].state &&cursorY+1<7)
+		if(gameState.phase==0)
 		{
-			cursorY+=1;
-		}
-		if(keyStates[Key_Down].state &&cursorY-1>=1)
-		{
-			cursorY-=1;
+			if(keyStates[Key_Up].state &&cursorY+1<7)
+			{
+				cursorY+=1;
+			}
+			if(keyStates[Key_Down].state &&cursorY-1>=1)
+			{
+				cursorY-=1;
+			}
 		}
 		drawCursor();
 		drawMenu();
-		if(keyStates[Key_Right].state && cursorY == 1)
+
+		if(keyStates[Key_Right].state && cursorY == 1)//connect to host machine
 		{
 			gameState.mode = GAME;
+			gameState.host = false;
+			gameState.phase = 0;
+			controlled = &platformRight;
+		}
+		if(keyStates[Key_Right].state && (cursorY == 5 || cursorY == 6))//wanna host?
+		{
+			gameState.mode = GAME;
+			gameState.host = true;
+			gameState.phase = 0;
+			setBitV(&LED, Gled);
+			controlled = &platformLeft;
 		}
 	}
+	
+	gameState.phase = (gameState.phase+1)%3;
 }

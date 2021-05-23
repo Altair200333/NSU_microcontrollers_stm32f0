@@ -428,6 +428,11 @@
               <FileType>5</FileType>
               <FilePath>.\tim_timer.h</FilePath>
             </File>
+            <File>
+              <FileName>bit_master.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\bit_master.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

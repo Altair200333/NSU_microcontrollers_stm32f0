@@ -13,7 +13,9 @@
 
 static volatile uint32_t rawValue = 0;
 int group = 1;
+static volatile bool _debug = true;
 
+static volatile uint32_t raw_result = 0;
 
 typedef struct{
 uint32_t   s[3];
@@ -23,18 +25,27 @@ uint8_t      ready;
 
 TSC_RESULT Result;
 
-void ResetSensors(TSC_RESULT *pResult){
-uint8_t   i;
+void ResetSensors(TSC_RESULT *pResult)
+{
+	for(uint8_t i=0;i<3; i++) 
+		pResult->s[i] = 0xFFFF;
 
-for(i=0;i<3; i++) pResult->s[i] = 0xFFFF;
-
-pResult->i = 0;
-pResult->ready=0;
+	pResult->i = 0;
+	pResult->ready=0;
 }
 
 void ReadSensors(TSC_RESULT *pResult)
 {
+	raw_result =  (Result.s[0] + Result.s[1] + Result.s[2])/3;
 
+	if(_debug)
+	{
+		drawSpiPos(0, Result.s[0]%8);
+		drawSpiPos(1, Result.s[1]%8);
+		drawSpiPos(2, Result.s[2]%8);
+		drawSpiPos(4, raw_result%8);
+	}
+	
 	ResetSensors(pResult); 
 	TSC->IOGCSR &= ~b11111111;
 	TSC->IOGCSR |= TSC_IOGCSR_G2E; 
@@ -44,6 +55,7 @@ void ReadSensors(TSC_RESULT *pResult)
 	
 	NVIC_EnableIRQ(TSC_IRQn);//bind interruput
 	TSC->CR |= TSC_CR_START;
+	
 }
 
 void TSC_IRQHandler(void)
@@ -83,12 +95,7 @@ void TSC_IRQHandler(void)
     Result.ready = 0;
   } else {
     Result.ready = 1;
-		drawSpiPos(0, Result.s[0]%8);
-	  drawSpiPos(1, Result.s[1]%8);
-	  drawSpiPos(2, Result.s[2]%8);
-  }
-	drawSpiPos(3, Result.i%8);
-	
+  }	
 }
 
 void lateTSCinit()
@@ -98,8 +105,8 @@ void lateTSCinit()
 	NVIC_EnableIRQ(TSC_IRQn);//bind interruput
 	
 	//TSC->CR |= TSC_CR_PGPSC_2 | TSC_CR_PGPSC_0 | TSC_CR_CTPH_0 | TSC_CR_CTPL_0 | TSC_CR_MCV_2 | TSC_CR_MCV_1 | TSC_CR_TSCE;//TSC_CR_PGPSC_2 | TSC_CR_PGPSC_0 | TSC_CR_CTPH_0 | TSC_CR_CTPL_0 | TSC_CR_MCV_2 | TSC_CR_MCV_1 | TSC_CR_TSCE;//pure magic lol
-	TSC->CR = (b111 << TSC_CR_CTPH_Pos)   // Charge transfer pulse high [3:0] = t_PGCLK * "?32"
-      | (0 << TSC_CR_CTPL_Pos)         // Charge transfer pulse low [3:0] = t_PGCLK * "x1"
+	TSC->CR = TSC_CR_CTPH_0   // Charge transfer pulse high [3:0] = t_PGCLK * "?32"
+      | TSC_CR_CTPL_0        // Charge transfer pulse low [3:0] = t_PGCLK * "x1"
       | (0 << TSC_CR_SSD_Pos)            // Spread spectrum deviation [6:0] = "x1" * t_SSCLK
       | (0 << TSC_CR_SSE_Pos)            // Spread spectrum enable = 0: DISABLE / 1: ENABLE
       | (1 << TSC_CR_SSPSC_Pos)         // Spread spectrum prescaler = 0: f_HCLK / 1: 0.5 * f_HCLK
@@ -109,7 +116,7 @@ void lateTSCinit()
       | (0 << TSC_CR_SYNCPOL_Pos)      // Synchronization pin polarity
       | (0 << TSC_CR_AM_Pos)            // Acquisition mode: 0: Normal acquisition mode / 1: Synchronized acquisition mode
       | (0 << TSC_CR_START_Pos)         // Start a new acquisition: 0 (hard): Acquisition not started / 1 (soft): Start a new acquisition
-      | (1 << TSC_CR_TSCE_Pos);         // Touch sensing controller enable: 0: disabled / 1: enabled
+      | TSC_CR_TSCE;         // Touch sensing controller enable: 0: disabled / 1: enabled
 	//TSC->CR |= TSC_CR_START;//(0x01 + 0x00C0 + 0x02); //enable TSC and start acquisition
 	//TSC->CR |= TSC_CR_AM;
 

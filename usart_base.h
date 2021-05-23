@@ -53,7 +53,6 @@ void ConstrTransfer(bool isTransmit)
 	GPIOD->AFR[0] |= 1 << (2  - 0) * 4;
 	// Clocking
 	
-
 	transfer.data = 0;
 	transfer.isTransmit = isTransmit;
 	if (isTransmit)
@@ -82,33 +81,23 @@ void setMode(bool isTransmit)
 }
 void transmitMessage()
 {
-	//if (transfer->isTransmit)
+	//while(!(USART1->ISR & USART_ISR_TC));
+	if ((USART3->ISR & USART_ISR_TC))
 	{
-		if ((USART3->ISR & USART_ISR_TC) == USART_ISR_TC)
-		{
-				/* clear transfer complete flag and fill TDR with a new char */
-				USART3->TDR = transfer.data;
-				USART3->ICR |= USART_ICR_TCCF;
-		}
+			/* clear transfer complete flag and fill TDR with a new char */
+			USART3->TDR = transfer.data;
+			USART3->ICR |= USART_ICR_TCCF;
 	}
-	//else
-	{
-		// you are idiotte
-	}
+	
+	
 }
 
 void receiveMessage()
 {
-	//if (!transfer->isTransmit)
+	int g = 0;
+	if ((USART3->ISR & USART_ISR_RXNE))
 	{
-		int g = 0;
-		if ((USART3->ISR & USART_ISR_RXNE) == USART_ISR_RXNE)
-		{
-			transfer.data = (uint8_t)(USART3->RDR); /* Receive data, clear flag */
-		}
+		transfer.data = (uint8_t)(USART3->RDR); /* Receive data, clear flag */
 	}
-	//else
-	{
-		// you are idiotte
-	}
+	
 }

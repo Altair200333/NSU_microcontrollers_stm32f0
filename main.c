@@ -118,18 +118,20 @@ void loop(Context* context)
 	onUpdatePong(timestamp);
 	//if (transfer.isTransmit)
 	//{
+	//	//setMode(true);
 	//	transfer.data = (uint8_t)cursorY;
 	//	transmitMessage();
 	//}
 	//else
 	//{
+	//	//setMode(false);
 	//	receiveMessage();
 	//	drawSpiPos(transfer.data, 0);
 	//}
 	clientFlush();
 	clearImage();
 	
-	wait(13);
+	wait(15);
 }	
 
 int main(void)

@@ -148,26 +148,76 @@ void drawMenu()
 	}
 }
 static volatile uint32_t lastUpdate = 0;
+bool receiveClient()
+{
+	if(transfer.isTransmit)
+	{
+		setMode(false);
+		return false;
+	}
+	receiveMessage();
+	if(transfer.data!=0)
+	{
+		platformLeft.y = transfer.data;
+	}
+	return true;
+}
 void onUpdatePong(volatile uint32_t timestamp)
 {
 	if(gameState.mode == GAME)
 	{
-		if(gameState.phase==0)
-		{
-			updateBall();
-			processInput();
-		}
-		else if(gameState.phase==1)
+		if(timestamp-lastUpdate>60)
 		{
 			if(gameState.host)
+				updateBall();
+			processInput();
+			lastUpdate = timestamp;
+		}
+		if(gameState.host)
+		{
+			if(gameState.phase==0)
 			{
-				transfer.data = platformLeft.y;
-				transmitMessage();
+				if(!transfer.isTransmit)
+					setMode(true);
+				else
+				{
+					transfer.data = platformLeft.y;
+					transmitMessage();
+					gameState.phase = (gameState.phase+1)%2;
+				}
 			}
-			else
+			if(gameState.phase==1)
 			{
-				receiveMessage();
-				platformLeft.y = transfer.data;
+				if(transfer.isTransmit)
+					setMode(false);
+				else
+				{
+					receiveMessage();
+					if(transfer.data!=0)
+					{
+						platformRight.y = transfer.data;
+					}
+					gameState.phase = (gameState.phase+1)%2;
+				}
+			}
+		}
+		if(!gameState.host)
+		{
+			if(gameState.phase==0)
+			{
+				if(receiveClient())
+					gameState.phase = (gameState.phase+1)%2;
+			}
+			if(gameState.phase==1)
+			{
+				if(!transfer.isTransmit)
+					setMode(true);
+				else
+				{
+					transfer.data = platformRight.y;
+					transmitMessage();
+					gameState.phase = (gameState.phase+1)%2;
+				}
 			}
 		}
 		drawPlatform(&platformLeft);
@@ -176,7 +226,7 @@ void onUpdatePong(volatile uint32_t timestamp)
 	}
 	else if(gameState.mode == MENU)
 	{
-		if(gameState.phase==0)
+		if(timestamp-lastUpdate>60)
 		{
 			if(keyStates[Key_Up].state &&cursorY+1<7)
 			{
@@ -186,6 +236,7 @@ void onUpdatePong(volatile uint32_t timestamp)
 			{
 				cursorY-=1;
 			}
+			lastUpdate = timestamp;
 		}
 		drawCursor();
 		drawMenu();
@@ -206,6 +257,4 @@ void onUpdatePong(volatile uint32_t timestamp)
 			controlled = &platformLeft;
 		}
 	}
-	
-	gameState.phase = (gameState.phase+1)%3;
 }

@@ -68,10 +68,8 @@ void resetAll()
 		GPIOC->MODER |= GPIO_MODER_MODER0+i;
 	}
 }
-
-void init(void)
+void initBtns()
 {
-	resetAll();
 	RCC->AHBENR |= RCC_AHBENR_GPIOCEN | RCC_AHBENR_GPIOAEN;	//PC6 - LED
 	
 	GPIOC->MODER &= ~GPIO_MODER_MODER0;
@@ -86,16 +84,22 @@ void init(void)
 	GPIOA->MODER &= ~GPIO_MODER_MODER5;
 	GPIOA->PUPDR |= GPIO_PUPDR_PUPDR4_1 | GPIO_PUPDR_PUPDR5_1;
 	GPIOC->MODER |= GPIO_MODER_MODER12_0;
+}
+void init(void)
+{
+	resetAll();
+	
 	//SystemInit(); // Device initialization
 	SystemInit();
 	SystemCoreClockUpdate();
 	SysTick_Config(SystemCoreClock/1000);
 	SysTick->CTRL = SysTick_CTRL_TICKINT_Msk | SysTick_CTRL_CLKSOURCE_Msk | SysTick_CTRL_ENABLE_Msk;
 	
+	touch_init();
+	initBtns();
 	resetBtns();
 	initSPI();
 	initPong();
-	touch_init();
 }
 
 bool buttonDown()
@@ -115,14 +119,13 @@ static int clamp(int val, int min,int max)
 
 #define CHECK_BIT(var,pos) ((var) & (1<<(pos)))
 
-
 void loop(Context* context)
 {
 	if(buttonDown())
 	{
 		//states[0] = true;
 	}
-	
+	//_debug = false;
 	//onUpdatePong(timestamp);
 
 	clientFlush();

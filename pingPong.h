@@ -85,7 +85,7 @@ void updateBall()
 		}
 		else
 		{
-			//setBitV(&LED, Bled);
+			setBitV(&LED, Bled);
 			ball.x = 3;
 			ball.y = 3;
 		}

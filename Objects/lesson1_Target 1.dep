@@ -1,6 +1,6 @@
 Dependencies for Project 'lesson1', Target 'Target 1': (DO NOT MODIFY !)
 CompilerVersion: 6150000::V6.15::ARMCLANG
-F (.\main.c)(0x60AAAB66)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m0 -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__EVAL -gdwarf-3 -O0 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -I./RTE/_Target_1-IE:/programms/controllers/packs/ARM/CMSIS/5.7.0/CMSIS/Core/Include-IE:/programms/controllers/packs/Keil/STM32F0xx_DFP/2.1.0/Drivers/CMSIS/Device/ST/STM32F0xx/Include-D__UVISION_VERSION="533" -D_RTE_ -DSTM32F072xB -D_RTE_-o ./objects/main.o -MD)
+F (.\main.c)(0x60AAB006)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m0 -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__EVAL -gdwarf-3 -O0 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -I./RTE/_Target_1-IE:/programms/controllers/packs/ARM/CMSIS/5.7.0/CMSIS/Core/Include-IE:/programms/controllers/packs/Keil/STM32F0xx_DFP/2.1.0/Drivers/CMSIS/Device/ST/STM32F0xx/Include-D__UVISION_VERSION="533" -D_RTE_ -DSTM32F072xB -D_RTE_-o ./objects/main.o -MD)
 I (E:\programms\controllers\packs\Keil\STM32F0xx_DFP\2.1.0\Drivers\CMSIS\Device\ST\STM32F0xx\Include\stm32f0xx.h)(0x5D7F76EA)
 I (E:\programms\controllers\packs\Keil\STM32F0xx_DFP\2.1.0\Drivers\CMSIS\Device\ST\STM32F0xx\Include\stm32f072xb.h)(0x5D7F76EA)
 I (E:\programms\controllers\packs\ARM\CMSIS\5.7.0\CMSIS\Core\Include\core_cm0.h)(0x5E8EDF32)
@@ -12,21 +12,21 @@ I (E:\programms\controllers\keil5\ARM\ARMCLANG\include\arm_compat.h)(0x5EE13552)
 I (E:\programms\controllers\keil5\ARM\ARMCLANG\include\arm_acle.h)(0x5F269548)
 I (E:\programms\controllers\packs\Keil\STM32F0xx_DFP\2.1.0\Drivers\CMSIS\Device\ST\STM32F0xx\Include\system_stm32f0xx.h)(0x5D7F76EA)
 I (E:\programms\controllers\keil5\ARM\ARMCLANG\include\stdlib.h)(0x5F36DEBE)
-I (buttons.h)(0x60AA34FD)
+I (buttons.h)(0x60AAAEDD)
 I (E:\programms\controllers\keil5\ARM\ARMCLANG\include\stdbool.h)(0x5F36DEBC)
-I (renderAPI.h)(0x60A92E39)
-I (pingPong.h)(0x60AA71A2)
+I (renderAPI.h)(0x60AAAEA0)
+I (pingPong.h)(0x60AAB0EB)
 I (E:\programms\controllers\keil5\ARM\ARMCLANG\include\math.h)(0x5F36DEB0)
 I (leds.h)(0x60A96986)
 I (usart_base.h)(0x60AA6D94)
 I (bit_master.h)(0x60AA43B7)
-I (tscHandler.h)(0x60AAAB37)
+I (tscHandler.h)(0x60AAB0A5)
 I (tim_timer.h)(0x60AA3D78)
-F (.\buttons.h)(0x60AA34FD)()
-F (.\renderAPI.h)(0x60A92E39)()
+F (.\buttons.h)(0x60AAAEDD)()
+F (.\renderAPI.h)(0x60AAAEA0)()
 F (.\adcRead.h)(0x60A48D3B)()
-F (.\pingPong.h)(0x60AA71A2)()
-F (.\tscHandler.h)(0x60AAAB37)()
+F (.\pingPong.h)(0x60AAB0EB)()
+F (.\tscHandler.h)(0x60AAB0A5)()
 F (.\leds.h)(0x60A96986)()
 F (.\usart_base.h)(0x60AA6D94)()
 F (.\tim_timer.h)(0x60AA3D78)()

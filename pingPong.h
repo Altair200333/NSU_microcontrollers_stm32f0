@@ -8,6 +8,7 @@
 #include "leds.h"
 #include "usart_base.h"
 #include "bit_master.h"
+#include "tscHandler.h"
 
 #define GAME 1
 #define MENU 0
@@ -96,15 +97,27 @@ void updateBall()
 	if(ball.y>7 || ball.y<0)
 		ball.yVelocity *= -1.0f;
 }
+static volatile bool useTSC = false;
 void processInput()
 {
-	if(keyStates[Key_Up].state && controlled->y+controlled->width+1<8)
+	if(!useTSC)
 	{
-		controlled->y += 1;
+		if(keyStates[Key_Up].state && controlled->y+controlled->width+1<8)
+		{
+			controlled->y += 1;
+		}
+		if(keyStates[Key_Down].state && controlled->y-controlled->width-1>=0)
+		{
+			controlled->y -= 1;
+		}
 	}
-	if(keyStates[Key_Down].state && controlled->y-controlled->width-1>=0)
+	else
 	{
-		controlled->y -= 1;
+		int val = raw_result%8;
+		if(val - controlled->width>=0 && val+controlled->width<8)
+		{
+			controlled->y = val;
+		}
 	}
 	if(gameState.single)
 	{	
@@ -167,6 +180,11 @@ void onUpdatePong(volatile uint32_t timestamp)
 {
 	if(gameState.mode == GAME)
 	{
+		if(keyStates[Usr_Btn].state && keyStates[Usr_Btn].clicked)
+		{
+			keyStates[Usr_Btn].clicked = !keyStates[Usr_Btn].clicked;
+			useTSC = !useTSC;
+		}
 		if(timestamp-lastUpdate>60)
 		{
 			if(gameState.host)

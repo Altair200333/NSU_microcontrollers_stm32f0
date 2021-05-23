@@ -91,10 +91,6 @@ void init(void)
 	ConstrTransfer(false);
 }
 
-bool buttonDown()
-{
-	return GPIOA->IDR & GPIO_IDR_0;
-}
 static volatile uint16_t levels[8];
 
 static int clamp(int val, int min,int max)
@@ -108,14 +104,14 @@ static int clamp(int val, int min,int max)
 
 #define CHECK_BIT(var,pos) ((var) & (1<<(pos)))
 static volatile int cntr = 0;
+static volatile uint32_t lastSensorPoll = 0;
+
 void loop(Context* context)
 {
-	if(buttonDown())
-	{
-		//states[0] = true;
-	}
-	_debug = true;
-	//onUpdatePong(timestamp);
+	
+	
+	_debug = false;
+	onUpdatePong(timestamp);
 	
 	//if (transfer.isTransmit)
 	//{
@@ -139,10 +135,16 @@ void loop(Context* context)
 	//	}
 	//}
 	
+	if(timestamp - lastSensorPoll > 100)
+	{
+			ReadSensors(&Result);
+			lastSensorPoll = timestamp;
+	}
+	
 	clientFlush();
 	clearImage();
 	
-	wait(20);
+	wait(10);
 }	
 
 int main(void)
@@ -154,7 +156,6 @@ int main(void)
 	
 	while(1)
 	{
-		ReadSensors(&Result);
 		loop(context);
 	}
 }

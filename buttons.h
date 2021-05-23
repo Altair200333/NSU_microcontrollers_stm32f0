@@ -5,6 +5,13 @@
 
 #define btn_delay 15
 
+
+#define Key_Up 2
+#define Key_Down 3
+#define Key_Right 1
+#define Key_Left 0
+#define Usr_Btn 4
+
 typedef struct 
 {
 	bool prevState;
@@ -13,11 +20,11 @@ typedef struct
 	uint32_t lastChangeTime;
 } keyState;
 
-static volatile keyState keyStates[4] = {0}; 
+static volatile keyState keyStates[5] = {0}; 
 
 static void resetBtns()
 {
-	for(int i=0;i<4;++i)
+	for(int i=0;i<5;++i)
 	{
 		keyStates[i].lastChangeTime = 0;
 		keyStates[i].state = false;
@@ -38,6 +45,10 @@ static void trySet(volatile keyState* key, bool btnState, volatile uint32_t time
 }
 
 
+bool buttonDown()
+{
+	return GPIOA->IDR & GPIO_IDR_0;
+}
 static void fetchButtons(volatile uint32_t timestamp)
 {
 	GPIOA->ODR &= ~GPIO_ODR_15;
@@ -74,6 +85,9 @@ static void fetchButtons(volatile uint32_t timestamp)
 	GPIOC->ODR &= ~GPIO_ODR_12;
 	GPIOA->IDR &= ~GPIO_IDR_4;
 	GPIOA->IDR &= ~GPIO_IDR_5;
+	
+	trySet(&keyStates[4], buttonDown(), timestamp);
+
 }
 void initBtns()
 {

@@ -4,11 +4,6 @@
 #include <stm32f0xx.h>
 #include "renderAPI.h"
 
-#define Key_Up 2
-#define Key_Down 3
-#define Key_Right 1
-#define Key_Left 0
-
 typedef struct 
 {
 	int rows[8];

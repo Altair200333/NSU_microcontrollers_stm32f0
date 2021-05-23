@@ -8,6 +8,7 @@
 #include "tscHandler.h"
 #include "leds.h"
 #include "usart_base.h"
+#include "tim_timer.h"
 
 typedef struct 
 {
@@ -85,6 +86,7 @@ void init(void)
 	resetBtns();
 	initSPI();
 	initPong();
+	initializeTimer();
 	
 	ConstrTransfer(&transfer, false);
 }

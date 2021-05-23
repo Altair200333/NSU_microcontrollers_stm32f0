@@ -423,6 +423,11 @@
               <FileType>5</FileType>
               <FilePath>.\usart_base.h</FilePath>
             </File>
+            <File>
+              <FileName>tim_timer.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\tim_timer.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

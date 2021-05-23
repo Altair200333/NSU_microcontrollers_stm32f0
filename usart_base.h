@@ -66,7 +66,18 @@ void ConstrTransfer(Transfer* transfer, bool isTransmit)
 		initUsartTransferReceive();
 	}
 }
-
+void setMode(bool isTransmit)
+{
+	if (isTransmit)
+	{
+		initUsartTransferTransmit();
+		USART3->TDR = 0;
+	}
+	else
+	{
+		initUsartTransferReceive();
+	}
+}
 void transmitMessage(Transfer* transfer)
 {
 	//if (transfer->isTransmit)

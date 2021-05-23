@@ -15,4 +15,4 @@
   E:\programms\controllers\keil5\ARM\ARMCLANG\Bin\..\include\stdbool.h \
   renderAPI.h pingPong.h \
   E:\programms\controllers\keil5\ARM\ARMCLANG\Bin\..\include\math.h \
-  leds.h tscHandler.h usart_base.h
+  leds.h tscHandler.h usart_base.h tim_timer.h

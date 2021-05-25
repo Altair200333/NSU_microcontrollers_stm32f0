@@ -169,5 +169,4 @@ void touch_init(void)
 
 	lateTSCinit();
 	TSC->IOSCR |= TSC_IOSCR_G3_IO3; //enable G1_IOX as sampling capacitor
-
 }

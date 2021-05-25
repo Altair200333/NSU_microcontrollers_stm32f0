@@ -79,7 +79,7 @@ void init(void)
 	//SystemInit(); // Device initialization
 	SystemInit();
 	SystemCoreClockUpdate();
-	SysTick_Config(SystemCoreClock/1000);
+	SysTick_Config(SystemCoreClock/500);
 	SysTick->CTRL = SysTick_CTRL_TICKINT_Msk | SysTick_CTRL_CLKSOURCE_Msk | SysTick_CTRL_ENABLE_Msk;
 	
 	touch_init();
@@ -89,9 +89,7 @@ void init(void)
 	initPong();
 	initializeTimer();
 	
-	initTransfer();
-	
-	setTransferMode(false);
+	ConstrTransfer(&transfer, false);
 }
 
 static volatile uint16_t levels[8];
@@ -105,11 +103,12 @@ static int clamp(int val, int min,int max)
 	return val;
 }
 
-#define CHECK_BIT(var,pos) ((var) & (1<<(pos)))
-static volatile int cntr = 0;
+
 static volatile uint32_t lastSensorPoll = 0;
-global int flippedC = 0;
-global uint8_t transmitData = 4;
+
+global int delay = 10;
+global int numberOfSends = 0;
+
 void loop(Context* context)
 {
 	if(buttonDown())
@@ -122,55 +121,49 @@ void loop(Context* context)
 	
 	if (transfer.isTransmit)
 	{
-		
-		if(flippedC == 9)
+		timer.counter = 0;
+		//transfer.dataT = cursorY;
+		setTransmitData();
+		if (transmitMessage(&transfer))
 		{
-			transfer.data = (uint8_t)63;
-			transmitMessage();
+			numberOfSends++;
+			if (numberOfSends >4)
+			{
+				transfer.isTransmit = false;
+				initUsart(&transfer);
+				timer.counter = 0;
+				numberOfSends = 0;
+			}
 		}
-		if(flippedC==10)
-		{
-			flippedC = 0;
-			setTransferMode(false);
-			wait(5);
-			receiveMessage();
-			wait(5);
-			receiveMessage();
-		}
-		else
-		{
-			transfer.data = (uint8_t)cursorY;
-			transmitMessage();
-		}
-		flippedC++;
 	}
 	else
 	{
-		receiveMessage();
-		if(transfer.data==63)
+		if (receiveMessage(&transfer))
 		{
-			setTransferMode(true);
-			wait(10);
+			timer.counter = 30;
 		}
-		else
-			drawSpiPos(transfer.data, 0);
-		if(flippedC>10)
+		if (timer.counter > 50)
 		{
-			//flippedC = 0;
-			//setTransferMode(true);
+			transfer.isTransmit = true;
+			initUsart(&transfer);
 		}
+		//drawSpiPos(transfer.dataR, 0);
+		receiveData();
 	}
-	//flippedC++;
-	if(timestamp - lastSensorPoll > 100)
+		
+	if (transfer.isTransmit)
 	{
-			ReadSensors(&Result);
-			lastSensorPoll = timestamp;
+		GPIOC->ODR |= GPIO_ODR_8;
+	}
+	else
+	{
+		GPIOC->ODR &= ~GPIO_ODR_8;
 	}
 	
 	clientFlush();
 	clearImage();
 	
-	wait(10);
+	//wait(delay);
 }	
 
 int main(void)

@@ -162,19 +162,84 @@ void drawMenu()
 	}
 }
 static volatile uint32_t lastUpdate = 0;
-bool receiveClient()
+static volatile int rtState = 0;
+
+uint8_t loadInt(uint8_t src)
 {
-	if(transfer.isTransmit)
+	uint8_t result=0;
+	if(getBit(2, src))
+		setBit(0, &result);
+	if(getBit(3, src))
+		setBit(1, &result);
+	if(getBit(4, src))
+		setBit(2, &result);
+	return result;
+}
+uint8_t writeInt(uint8_t src)
+{
+	uint8_t result=0;
+	if(getBit(0, src))
+		setBit(2, &result);
+	if(getBit(1, src))
+		setBit(3, &result);
+	if(getBit(2, src))
+		setBit(4, &result);
+	return result;
+}
+void setTransmitData()
+{
+	if(gameState.mode == GAME)
 	{
-		setTransferMode(false);
-		return false;
+		if(gameState.host)
+		{
+			if(rtState == 0)
+			{
+				uint8_t out = writeInt(platformLeft.y);
+				setBit(1, &out);//01
+				transfer.dataT = out;
+			}
+			if(rtState == 1)
+			{
+				uint8_t out = writeInt((int)round(ball.x));
+				setBit(0, &out);//10
+				transfer.dataT = out;
+			}
+			if(rtState == 2)
+			{
+				uint8_t out = writeInt((int)round(ball.y));
+				setBit(0, &out);//11
+				setBit(1, &out);
+				transfer.dataT = out;
+			}
+		}
+		else
+		{
+			transfer.dataT = platformRight.y;
+		}
+		rtState = (rtState+1)%3;
 	}
-	receiveMessage();
-	if(transfer.data!=0)
+}
+void receiveData()
+{
+	if(gameState.mode == GAME)
 	{
-		platformLeft.y = transfer.data;
+		if(!gameState.host)
+		{
+			if(rtState == 0 && getBit(0, transfer.dataR) == 0 && getBit(1, transfer.dataR) == 1)
+			{
+				platformLeft.y = loadInt(transfer.dataR);
+			}
+			if(rtState == 1 && getBit(0, transfer.dataR) == 1 && getBit(1, transfer.dataR) == 0)
+				ball.x = (float)loadInt(transfer.dataR);
+			if(rtState == 2 && getBit(0, transfer.dataR) == 1 && getBit(1, transfer.dataR) == 1)
+				ball.y = (float)loadInt(transfer.dataR);
+		}
+		else
+		{
+			platformRight.y = transfer.dataR;
+		}
+		rtState = (rtState+1)%3;
 	}
-	return true;
 }
 void onUpdatePong(volatile uint32_t timestamp)
 {
@@ -185,7 +250,7 @@ void onUpdatePong(volatile uint32_t timestamp)
 			keyStates[Usr_Btn].clicked = !keyStates[Usr_Btn].clicked;
 			useTSC = !useTSC;
 		}
-		if(timestamp-lastUpdate>60)
+		if(timestamp-lastUpdate>40)
 		{
 			if(gameState.host)
 				updateBall();
@@ -199,7 +264,7 @@ void onUpdatePong(volatile uint32_t timestamp)
 	}
 	else if(gameState.mode == MENU)
 	{
-		if(timestamp-lastUpdate>60)
+		if(timestamp-lastUpdate>30)
 		{
 			if(keyStates[Key_Up].state &&cursorY+1<7)
 			{
@@ -220,6 +285,9 @@ void onUpdatePong(volatile uint32_t timestamp)
 			gameState.host = false;
 			gameState.phase = 0;
 			controlled = &platformRight;
+			
+			transfer.isTransmit = false;
+			initUsart(&transfer);
 		}
 		if(keyStates[Key_Right].state && (cursorY == 5 || cursorY == 6))//wanna host?
 		{
@@ -228,6 +296,9 @@ void onUpdatePong(volatile uint32_t timestamp)
 			gameState.phase = 0;
 			setBitV(&LED, Gled);
 			controlled = &platformLeft;
+			
+			transfer.isTransmit = true;
+			initUsart(&transfer);
 		}
 	}
 }

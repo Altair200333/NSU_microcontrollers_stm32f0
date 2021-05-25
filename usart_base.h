@@ -7,57 +7,50 @@
 
 typedef struct _transfer
 {
-	unsigned char data;
+	unsigned char dataT;
+	unsigned char dataR;
 	bool isTransmit;
 }Transfer;
-
-static volatile Transfer transfer;
-
+Transfer transfer;
 
 void initUsartTransferTransmit()
 {
 	/* (1) Oversampling by 16, 9600 baud */
 	/* (2) 8 data bit, 1 start bit, 1 stop bit, no parity */
-	USART3->BRR = 480000 / 96; /* (1) */
+	USART3->CR1 &= ~USART_CR1_UE;
+	USART3->ICR = 0;
 	USART3->CR1 &= ~USART_CR1_RE;
+	USART3->BRR = 480000 / 96; /* (1) */
 	USART3->CR1 = USART_CR1_TE | USART_CR1_UE;/* (2) */
 	//while(!(USART3->ISR & USART_ISR_TC)); // polling idle frame Transmission
 	//USART3->ICR |= USART_ICR_TCCF; // clear TC flag
-	//USART3->CR1 |= USART_CR1_RXNEIE;
 }
 
 void initUsartTransferReceive()
 {
 	/* (1) oversampling by 16, 9600 baud */
 	/* (2) 8 data bit, 1 start bit, 1 stop bit, no parity, reception mode */
+	USART3->CR1 &= ~USART_CR1_UE;
+	USART3->ICR = 0;
+	USART3->CR1 &= ~USART_CR1_TE;
 	USART3->BRR = 480000 / 96; /* (1) */
-	USART3->CR1 &= ~USART_CR1_TE;//unset trasnmit enabled
 	USART3->CR1 = USART_CR1_RE | USART_CR1_UE; /* (2) */
 }
 
-void setTransferMode(bool isTransmit)
+void initUsart(Transfer* transfer)
 {
-	//https://github.com/jxwleong/stm32-usart#usart
-	USART3->ICR = 0;//clear all registers
-	volatile uint32_t tmp = USART3->RDR;//clear interrupt flags
-	//clear overrun
-	tmp = USART3->ISR;
-	tmp = USART3->RDR;
-	tmp = USART3->TDR;
-	//
-	transfer.data = 0;
-	transfer.isTransmit = isTransmit;
-	if (isTransmit)
+	if (transfer->isTransmit)
 	{
 		initUsartTransferTransmit();
-		USART3->TDR = 0;
+		//USART3->TDR = 0;
 	}
 	else
 	{
 		initUsartTransferReceive();
 	}
 }
-void initTransfer()
+
+void ConstrTransfer(Transfer* transfer, bool isTransmit)
 {
 	RCC->APB1ENR|= RCC_APB1ENR_USART3EN;
 	RCC->AHBENR |= RCC_AHBENR_GPIOCEN | RCC_AHBENR_GPIODEN;
@@ -78,38 +71,34 @@ void initTransfer()
 	GPIOD->AFR[0] |= 1 << (2  - 0) * 4;
 	// Clocking
 	
+
+	transfer->dataR = 0;
+	transfer->dataT = 0;
+	transfer->isTransmit = isTransmit;
+	
+	initUsart(transfer);
 }
 
-void transmitMessage()
+
+
+bool transmitMessage(Transfer* transfer)
 {
-	//if (transfer->isTransmit)
-	{
 		if ((USART3->ISR & USART_ISR_TC) == USART_ISR_TC)
 		{
 				/* clear transfer complete flag and fill TDR with a new char */
-				USART3->TDR = transfer.data;
+				USART3->TDR = transfer->dataT;
 				USART3->ICR |= USART_ICR_TCCF;
-				
+				return true;
 		}
-	}
-	//else
-	{
-		// you are idiotte
-	}
+		return false;
 }
 
-void receiveMessage()
+bool receiveMessage(Transfer* transfer)
 {
-	//if (!transfer->isTransmit)
-	{
-		int g = 0;
 		if ((USART3->ISR & USART_ISR_RXNE) == USART_ISR_RXNE)
 		{
-			transfer.data = (uint8_t)(USART3->RDR); /* Receive data, clear flag */
+			transfer->dataR = (uint8_t)(USART3->RDR); /* Receive data, clear flag */
+			return true;
 		}
-	}
-	//else
-	{
-		// you are idiotte
-	}
+		return false;
 }

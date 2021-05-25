@@ -88,7 +88,8 @@ void init(void)
 	initPong();
 	initializeTimer();
 	
-	ConstrTransfer(false);
+	initTransfer();
+	setTransferMode(false);
 }
 
 static volatile uint16_t levels[8];
@@ -108,43 +109,35 @@ static volatile uint32_t lastSensorPoll = 0;
 
 void loop(Context* context)
 {
-	
+	if(buttonDown())
+	{
+		//states[0] = true;
+	}
 	
 	_debug = false;
 	onUpdatePong(timestamp);
 	
-	//if (transfer.isTransmit)
-	//{
-	//	if(cntr == 3)
-	//		cntr = 0;
-	//	if(transmitFinished())
-	//	{
-	//		drawSpiPos(0, cntr);
-	//		transfer.data = (uint8_t)cntr;
-	//		transmitMessage();
-	//		cntr++;
-	//	}
-	//}
-	//else
-	//{
-	//	if(receiveFinished())
-	//	{
-	//		receiveMessage();
-	//		drawSpiPos(0, transfer.data);
-	//		cntr++;
-	//	}
-	//}
-	
-	if(timestamp - lastSensorPoll > 100)
+	if (transfer.isTransmit)
 	{
-			ReadSensors(&Result);
-			lastSensorPoll = timestamp;
+		transfer.data = (uint8_t)cursorY;
+		transmitMessage();
 	}
+	else
+	{
+		receiveMessage();
+		drawSpiPos(transfer.data, 0);
+	}
+	
+	//if(timestamp - lastSensorPoll > 100)
+	//{
+	//		ReadSensors(&Result);
+	//		lastSensorPoll = timestamp;
+	//}
 	
 	clientFlush();
 	clearImage();
 	
-	wait(10);
+	wait(20);
 }	
 
 int main(void)

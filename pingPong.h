@@ -166,7 +166,7 @@ bool receiveClient()
 {
 	if(transfer.isTransmit)
 	{
-		setMode(false);
+		setTransferMode(false);
 		return false;
 	}
 	receiveMessage();

@@ -132,9 +132,9 @@ void loop(Context* context)
 		{
 			flippedC = 0;
 			setTransferMode(false);
-			wait(50);
+			wait(5);
 			receiveMessage();
-			wait(50);
+			wait(5);
 			receiveMessage();
 		}
 		else
@@ -150,7 +150,7 @@ void loop(Context* context)
 		if(transfer.data==63)
 		{
 			setTransferMode(true);
-			wait(100);
+			wait(10);
 		}
 		else
 			drawSpiPos(transfer.data, 0);
@@ -161,16 +161,16 @@ void loop(Context* context)
 		}
 	}
 	//flippedC++;
-	//if(timestamp - lastSensorPoll > 100)
-	//{
-	//		ReadSensors(&Result);
-	//		lastSensorPoll = timestamp;
-	//}
+	if(timestamp - lastSensorPoll > 100)
+	{
+			ReadSensors(&Result);
+			lastSensorPoll = timestamp;
+	}
 	
 	clientFlush();
 	clearImage();
 	
-	wait(100);
+	wait(10);
 }	
 
 int main(void)

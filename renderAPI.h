@@ -3,13 +3,16 @@
 #include <stdlib.h>
 #include <stm32f0xx.h>
 #include "renderAPI.h"
+#include <string.h>
 
 typedef struct 
 {
 	int rows[8];
 } GLRenderBuffer;
 
-static volatile GLRenderBuffer renderBuffer;
+static volatile GLRenderBuffer buffers[2];
+static volatile GLRenderBuffer* frontBuffer;
+static volatile GLRenderBuffer* backBuffer;
 
 static void initSPI()
 {
@@ -48,6 +51,9 @@ static void initSPI()
 	NVIC_EnableIRQ(SPI2_IRQn);
 
 	SPI2->DR = 0;
+	frontBuffer = &buffers[0];
+	backBuffer = &buffers[1];
+
   //Enable Tx buffer empty interrupt
   //SET_BIT(SPI2->CR2, SPI_CR2_TXEIE);
   //Enable error interrupt
@@ -68,7 +74,7 @@ static void drawSpiPos(int x, int y)
 	if(y>=8 || y<0 || x<0 || x>=8)
 		return;
 		
-	renderBuffer.rows[y] |= (0x1U << y) << 8 | (0x1U << x);
+	frontBuffer->rows[y] |= (0x1U << y) << 8 | (0x1U << x);
 }
 bool renderBusy()
 {
@@ -84,39 +90,14 @@ void renderFlush()
 }
 static void clearImage()
 {
-	for(int i=0; i<8; ++i)
-	{
-		renderBuffer.rows[i] = 0;
-	}
+	memset((void*)frontBuffer, 0, sizeof(GLRenderBuffer));
 }
 
 static volatile bool renderedImage = true;
-static volatile GLRenderBuffer copyRenderer;
 static volatile int renderingLine = 0;
 bool flushed = false;
 
-void renderLoop(void)
-{
-	if(renderingLine >= 8)
-		renderedImage = true;
-	if(renderedImage)
-	{
-		if(!flushed)
-			return;
-		renderingLine = 0;
-		renderedImage = false;
-	}
-	
-	if(renderBusy())
-		return;
-	
-	renderFlush();
-	
-	renderBegin();
-	drawRow(renderingLine, &copyRenderer);
-	renderingLine++;
-	
-}
+
 void renderInt(void)
 {
 	if(renderingLine >= 8)
@@ -132,12 +113,14 @@ void renderInt(void)
 	renderFlush();
 	
 	renderBegin();
-	drawRow(renderingLine, &copyRenderer);
+	drawRow(renderingLine, backBuffer);
 	renderingLine++;
 	
 }
 void clientFlush()
 {
 	flushed = true;
-	copyRenderer = renderBuffer;
+	volatile GLRenderBuffer* tmp = frontBuffer;
+	frontBuffer = backBuffer;
+	backBuffer = tmp;
 }

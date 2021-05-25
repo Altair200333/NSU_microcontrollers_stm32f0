@@ -9,6 +9,7 @@
 #include "leds.h"
 #include "usart_base.h"
 #include "tim_timer.h"
+#include "usart_lan.h"
 
 #define global static volatile
 typedef struct 
@@ -26,13 +27,10 @@ void resetBitV(volatile uint32_t* bit, uint32_t value);
 void wait(uint32_t);
 bool buttonDown(void);
 void SysTick_Handler (void);
-void traffic(void);
 void SysTick_Init(void);
 void SysTick_Wait(uint32_t);
 void renderLoop(void);
 void DMA1_Channel1_IRQHandler(void);
-
-#define F_CPU 		72000000UL	
 
 static volatile uint32_t timestamp = 0;
   
@@ -92,8 +90,6 @@ void init(void)
 	ConstrTransfer(&transfer, false);
 }
 
-static volatile uint16_t levels[8];
-
 static int clamp(int val, int min,int max)
 {
 	if(val>max)
@@ -107,7 +103,7 @@ static int clamp(int val, int min,int max)
 static volatile uint32_t lastSensorPoll = 0;
 
 global int delay = 10;
-global int numberOfSends = 0;
+
 
 void loop(Context* context)
 {
@@ -119,37 +115,7 @@ void loop(Context* context)
 	_debug = false;
 	onUpdatePong(timestamp);
 	
-	if (transfer.isTransmit)
-	{
-		timer.counter = 0;
-		//transfer.dataT = cursorY;
-		setTransmitData();
-		if (transmitMessage(&transfer))
-		{
-			numberOfSends++;
-			if (numberOfSends > 3)
-			{
-				transfer.isTransmit = false;
-				initUsart(&transfer);
-				timer.counter = 0;
-				numberOfSends = 0;
-			}
-		}
-	}
-	else
-	{
-		if (receiveMessage(&transfer))
-		{
-			timer.counter = 30;
-		}
-		if (timer.counter > 50)
-		{
-			transfer.isTransmit = true;
-			initUsart(&transfer);
-		}
-		//drawSpiPos(transfer.dataR, 0);
-		receiveData();
-	}
+	autoSyncLan();
 		
 	if (transfer.isTransmit)
 	{

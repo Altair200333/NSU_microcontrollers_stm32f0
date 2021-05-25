@@ -433,6 +433,11 @@
               <FileType>5</FileType>
               <FilePath>.\bit_master.h</FilePath>
             </File>
+            <File>
+              <FileName>usart_lan.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\usart_lan.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

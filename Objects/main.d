@@ -13,6 +13,8 @@
   E:\programms\controllers\keil5\ARM\ARMCLANG\Bin\..\include\stdlib.h \
   buttons.h \
   E:\programms\controllers\keil5\ARM\ARMCLANG\Bin\..\include\stdbool.h \
-  renderAPI.h pingPong.h \
+  renderAPI.h \
+  E:\programms\controllers\keil5\ARM\ARMCLANG\Bin\..\include\string.h \
+  pingPong.h \
   E:\programms\controllers\keil5\ARM\ARMCLANG\Bin\..\include\math.h \
-  leds.h usart_base.h bit_master.h tscHandler.h tim_timer.h
+  leds.h usart_base.h bit_master.h tscHandler.h tim_timer.h usart_lan.h

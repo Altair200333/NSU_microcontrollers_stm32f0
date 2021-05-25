@@ -127,7 +127,7 @@ void loop(Context* context)
 		if (transmitMessage(&transfer))
 		{
 			numberOfSends++;
-			if (numberOfSends >4)
+			if (numberOfSends > 3)
 			{
 				transfer.isTransmit = false;
 				initUsart(&transfer);

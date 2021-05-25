@@ -164,26 +164,26 @@ void drawMenu()
 static volatile uint32_t lastUpdate = 0;
 static volatile int rtState = 0;
 
-uint8_t loadInt(uint8_t src)
+uint8_t loadInt(uint8_t src, int offset)
 {
 	uint8_t result=0;
-	if(getBit(2, src))
+	if(getBit(2+offset, src))
 		setBit(0, &result);
-	if(getBit(3, src))
+	if(getBit(3+offset, src))
 		setBit(1, &result);
-	if(getBit(4, src))
+	if(getBit(4+offset, src))
 		setBit(2, &result);
 	return result;
 }
-uint8_t writeInt(uint8_t src)
+uint8_t writeInt(uint8_t src, int offset)
 {
 	uint8_t result=0;
 	if(getBit(0, src))
-		setBit(2, &result);
+		setBit(2+offset, &result);
 	if(getBit(1, src))
-		setBit(3, &result);
+		setBit(3+offset, &result);
 	if(getBit(2, src))
-		setBit(4, &result);
+		setBit(4+offset, &result);
 	return result;
 }
 void setTransmitData()
@@ -194,29 +194,24 @@ void setTransmitData()
 		{
 			if(rtState == 0)
 			{
-				uint8_t out = writeInt(platformLeft.y);
+				uint8_t out = writeInt(platformLeft.y, 0);
 				setBit(1, &out);//01
 				transfer.dataT = out;
 			}
 			if(rtState == 1)
 			{
-				uint8_t out = writeInt((int)round(ball.x));
+				uint8_t out = writeInt((int)round(ball.x), 0) | writeInt((int)round(ball.y), 3);
 				setBit(0, &out);//10
-				transfer.dataT = out;
-			}
-			if(rtState == 2)
-			{
-				uint8_t out = writeInt((int)round(ball.y));
-				setBit(0, &out);//11
-				setBit(1, &out);
 				transfer.dataT = out;
 			}
 		}
 		else
 		{
-			transfer.dataT = platformRight.y;
+			uint8_t out = writeInt(platformRight.y, 0);
+			setBit(1, &out);//01
+			transfer.dataT = out;
 		}
-		rtState = (rtState+1)%3;
+		rtState = (rtState+1)%2;
 	}
 }
 void receiveData()
@@ -225,20 +220,23 @@ void receiveData()
 	{
 		if(!gameState.host)
 		{
-			if(rtState == 0 && getBit(0, transfer.dataR) == 0 && getBit(1, transfer.dataR) == 1)
+			if(getBit(0, transfer.dataR) == 0 && getBit(1, transfer.dataR) == 1)
 			{
-				platformLeft.y = loadInt(transfer.dataR);
+				platformLeft.y = loadInt(transfer.dataR, 0);
 			}
-			if(rtState == 1 && getBit(0, transfer.dataR) == 1 && getBit(1, transfer.dataR) == 0)
-				ball.x = (float)loadInt(transfer.dataR);
-			if(rtState == 2 && getBit(0, transfer.dataR) == 1 && getBit(1, transfer.dataR) == 1)
-				ball.y = (float)loadInt(transfer.dataR);
+			if(getBit(0, transfer.dataR) == 1 && getBit(1, transfer.dataR) == 0)
+			{
+				ball.x = (float)loadInt(transfer.dataR, 0);
+				ball.y = (float)loadInt(transfer.dataR, 3);
+			}
 		}
 		else
 		{
-			platformRight.y = transfer.dataR;
+			if(getBit(0, transfer.dataR) == 0 && getBit(1, transfer.dataR) == 1)
+			{
+				platformRight.y = loadInt(transfer.dataR, 0);
+			}
 		}
-		rtState = (rtState+1)%3;
 	}
 }
 void onUpdatePong(volatile uint32_t timestamp)

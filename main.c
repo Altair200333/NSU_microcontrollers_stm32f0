@@ -10,6 +10,7 @@
 #include "usart_base.h"
 #include "tim_timer.h"
 
+#define global static volatile
 typedef struct 
 {
 	uint32_t counter;
@@ -106,7 +107,8 @@ static int clamp(int val, int min,int max)
 #define CHECK_BIT(var,pos) ((var) & (1<<(pos)))
 static volatile int cntr = 0;
 static volatile uint32_t lastSensorPoll = 0;
-
+global int flippedC = 0;
+global uint8_t transmitData = 4;
 void loop(Context* context)
 {
 	if(buttonDown())
@@ -119,15 +121,43 @@ void loop(Context* context)
 	
 	if (transfer.isTransmit)
 	{
-		transfer.data = (uint8_t)cursorY;
-		transmitMessage();
+		
+		if(flippedC == 9)
+		{
+			transfer.data = (uint8_t)63;
+			transmitMessage();
+		}
+		if(flippedC==10)
+		{
+			flippedC = 0;
+			setTransferMode(false);
+			wait(100);
+			receiveMessage();
+		}
+		else
+		{
+			transfer.data = (uint8_t)cursorY;
+			transmitMessage();
+		}
+		flippedC++;
 	}
 	else
 	{
 		receiveMessage();
-		drawSpiPos(transfer.data, 0);
+		if(transfer.data==63)
+		{
+			setTransferMode(true);
+			wait(100);
+		}
+		else
+			drawSpiPos(transfer.data, 0);
+		if(flippedC>10)
+		{
+			//flippedC = 0;
+			//setTransferMode(true);
+		}
 	}
-	
+	//flippedC++;
 	//if(timestamp - lastSensorPoll > 100)
 	//{
 	//		ReadSensors(&Result);
@@ -137,7 +167,7 @@ void loop(Context* context)
 	clientFlush();
 	clearImage();
 	
-	wait(20);
+	wait(100);
 }	
 
 int main(void)

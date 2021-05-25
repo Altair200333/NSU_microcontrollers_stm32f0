@@ -1,5 +1,6 @@
 #pragma once
 #include <stdlib.h>
+#include <stm32f0xx.h>
 
 #define LED GPIOC->ODR
 #define Rled GPIO_ODR_6

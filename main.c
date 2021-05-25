@@ -90,6 +90,7 @@ void init(void)
 	initializeTimer();
 	
 	initTransfer();
+	
 	setTransferMode(false);
 }
 
@@ -132,7 +133,6 @@ void loop(Context* context)
 			flippedC = 0;
 			setTransferMode(false);
 			wait(50);
-			USART3->RDR = 0;//DO NOT FREAKING READ YOUR DATA, NIGGA
 			receiveMessage();
 			wait(50);
 			receiveMessage();

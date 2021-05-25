@@ -131,7 +131,10 @@ void loop(Context* context)
 		{
 			flippedC = 0;
 			setTransferMode(false);
-			wait(100);
+			wait(50);
+			USART3->RDR = 0;//DO NOT FREAKING READ YOUR DATA, NIGGA
+			receiveMessage();
+			wait(50);
 			receiveMessage();
 		}
 		else

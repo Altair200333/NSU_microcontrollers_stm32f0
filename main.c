@@ -102,34 +102,23 @@ static int clamp(int val, int min,int max)
 
 static volatile uint32_t lastSensorPoll = 0;
 
-global int delay = 10;
-
 
 void loop(Context* context)
 {
-	if(buttonDown())
-	{
-		//states[0] = true;
-	}
-	
 	_debug = false;
 	onUpdatePong(timestamp);
 	
 	autoSyncLan();
 		
-	if (transfer.isTransmit)
+	if(timestamp - lastSensorPoll > 50)
 	{
-		GPIOC->ODR |= GPIO_ODR_8;
-	}
-	else
-	{
-		GPIOC->ODR &= ~GPIO_ODR_8;
+			ReadSensors(&Result);
+			lastSensorPoll = timestamp;
 	}
 	
 	clientFlush();
 	clearImage();
 	
-	//wait(delay);
 }	
 
 int main(void)

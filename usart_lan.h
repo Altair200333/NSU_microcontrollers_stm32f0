@@ -2,6 +2,7 @@
 #include "pingPong.h"
 #include "usart_base.h"
 #include "tim_timer.h"
+#include "leds.h"
 
 static volatile int numberOfSends = 0;
 
@@ -42,4 +43,15 @@ void autoSyncLan()
 		}
 		receiveData();
 	}
+	
+	
+	if (transfer.isTransmit)
+	{
+		setBitV(&LED, Oled);
+	}
+	else
+	{
+		resetBitV(&LED, Oled);
+	}
+	
 }

@@ -18,13 +18,13 @@ void autoSyncLan()
 		timer.counter = 0;
 		//transfer.dataT = cursorY;
 		setTransmitData();
-		if (transmitMessage(&transfer))
+		if (transmitMessage())
 		{
 			numberOfSends++;
 			if (numberOfSends > 3)
 			{
 				transfer.isTransmit = false;
-				initUsart(&transfer);
+				initUsart();
 				timer.counter = 0;
 				numberOfSends = 0;
 			}
@@ -32,14 +32,14 @@ void autoSyncLan()
 	}
 	else
 	{
-		if (receiveMessage(&transfer))
+		if (receiveMessage())
 		{
 			timer.counter = get_delay(10, 20);
 		}
 		if (timer.counter > 30)
 		{
 			transfer.isTransmit = true;
-			initUsart(&transfer);
+			initUsart();
 		}
 		receiveData();
 	}

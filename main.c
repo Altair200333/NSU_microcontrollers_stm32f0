@@ -87,7 +87,7 @@ void init(void)
 	initPong();
 	initializeTimer();
 	
-	ConstrTransfer(&transfer, false);
+	ConstrTransfer(false);
 }
 
 static int clamp(int val, int min,int max)

@@ -89,7 +89,9 @@ void updateBall()
 		}
 		else
 		{
-			//setBitV(&LED, Bled);
+			if(gameState.host)
+				setBitV(&LED, Bled);
+			
 			ball.x = 3;
 			ball.y = 3;
 		}
@@ -285,7 +287,7 @@ void onUpdatePong(volatile uint32_t timestamp)
 			controlled = &platformRight;
 			
 			transfer.isTransmit = false;
-			initUsart(&transfer);
+			initUsart();
 		}
 		if(keyStates[Key_Right].state && (cursorY == 5 || cursorY == 6))//wanna host?
 		{
@@ -296,7 +298,7 @@ void onUpdatePong(volatile uint32_t timestamp)
 			controlled = &platformLeft;
 			
 			transfer.isTransmit = true;
-			initUsart(&transfer);
+			initUsart();
 		}
 	}
 }
